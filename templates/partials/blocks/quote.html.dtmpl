@@ -1,0 +1,6 @@
+<section class="block block-quote py-5 text-center">
+  <blockquote class="blockquote mb-0">
+    <p class="fs-4 col-lg-8 mx-auto">{var:block.text escape}</p>
+    {if:block.author}<footer class="blockquote-footer mt-2">{var:block.author escape}{if:block.role}, <cite>{var:block.role escape}</cite>{endif}</footer>{endif}
+  </blockquote>
+</section>

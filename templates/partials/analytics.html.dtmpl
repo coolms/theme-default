@@ -1,0 +1,45 @@
+{verbatim}<script>
+(function(){
+  if (window.__coolmsAnalyticsBound) return;
+  window.__coolmsAnalyticsBound = true;
+  var KEY = 'coolms_consent';
+  var sent = false;
+  function getCookie(name){
+    var match = document.cookie.split('; ').filter(function(c){ return c.indexOf(name + '=') === 0; })[0];
+    return match ? decodeURIComponent(match.slice(name.length + 1)) : '';
+  }
+  function consented(){
+    // ADR-146 tiered consent — analytics category. Cookie is authoritative; the
+    // data-consent attribute reflects an in-session choice. Legacy `accepted` grants
+    // analytics; the granular form is a comma-list of categories.
+    var raw = String(getCookie(KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
+    if (raw === 'accepted') return true;
+    if (raw === '' || raw === 'declined') return false;
+    return raw.split(',').indexOf('analytics') !== -1;
+  }
+  function record(){
+    if (sent || !consented()) return;
+    sent = true;
+    try {
+      fetch('/api/v1/analytics/pageview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: location.pathname }),
+        keepalive: true,
+        credentials: 'omit'
+      }).catch(function(){});
+    } catch (e) { /* analytics is best-effort */ }
+  }
+  if (consented()){
+    record();
+    return;
+  }
+  // Not decided yet — count this view if the visitor accepts during this load.
+  if (window.MutationObserver){
+    var obs = new MutationObserver(function(){
+      if (consented()){ record(); obs.disconnect(); }
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-consent'] });
+  }
+})();
+</script>{endverbatim}

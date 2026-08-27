@@ -1,0 +1,12 @@
+<section class="block block-features py-5">
+  {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {loop:block.items:item}
+      <div class="col text-center">
+        {if:item.icon}<div class="block-features__icon fs-2 mb-2">{var:item.icon escape}</div>{endif}
+        {if:item.title}<h3 class="h5">{var:item.title escape}</h3>{endif}
+        {if:item.text}<p class="text-muted mb-0">{var:item.text escape}</p>{endif}
+      </div>
+    {endloop}
+  </div>
+</section>

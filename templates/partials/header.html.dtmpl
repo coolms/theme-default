@@ -1,0 +1,35 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">{var:site.label}</a>
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      {widget:nav:menu}
+      <form class="d-flex ms-auto me-2" method="get" action="/search" role="search">
+        <input type="search" class="form-control form-control-sm" name="q"
+               placeholder="Search…" aria-label="Search">
+      </form>
+      {include:`partials/language-switcher.html.dtmpl`}
+      <div class="d-flex gap-2">
+        {if:user.authenticated}
+          {if:routes.dashboard}
+            <a href="{var:routes.dashboard}" class="btn btn-outline-light btn-sm">Dashboard</a>
+          {endif}
+          {if:routes.logout}
+            <a href="{var:routes.logout}" class="btn btn-light btn-sm">Sign out</a>
+          {endif}
+        {endif}
+        {unless:user.authenticated}
+          {if:routes.login}
+            <a href="{var:routes.login}" class="btn btn-outline-light btn-sm">Sign in</a>
+          {endif}
+          {if:routes.register}
+            <a href="{var:routes.register}" class="btn btn-light btn-sm">Register</a>
+          {endif}
+        {endunless}
+      </div>
+    </div>
+  </div>
+</header>

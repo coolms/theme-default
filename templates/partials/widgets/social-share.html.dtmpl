@@ -1,0 +1,28 @@
+<div class="social-share" aria-label="Share this page">
+  <span class="social-share__label">{var:label escape}</span>
+  {loop:items:it}<a class="social-share__link social-share__link--{var:it.key escape}" href="{var:it.href escape}" target="_blank" rel="noopener noreferrer" title="Share on {var:it.label escape}"><i class="bi bi-{var:it.icon escape}" aria-hidden="true"></i><span>{var:it.label escape}</span></a>{endloop}
+  <button type="button" class="social-share__link social-share__link--copy" data-share-url="{var:url escape}" title="Copy link"><i class="bi bi-link-45deg" aria-hidden="true"></i><span>Copy link</span></button>
+</div>
+{verbatim}<script>
+(function(){
+  if (window.__coolmsShareBound) return;
+  window.__coolmsShareBound = true;
+  document.querySelectorAll('.social-share__link--copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var url = btn.getAttribute('data-share-url') || window.location.href;
+      var label = btn.querySelector('span');
+      var restore = label ? label.textContent : '';
+      var done = function(){ if(label){ label.textContent = 'Copied!'; setTimeout(function(){ label.textContent = restore; }, 1500); } };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(done).catch(function(){});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.setAttribute('readonly',''); ta.style.position = 'absolute'; ta.style.left = '-9999px';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch(e){}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+})();
+</script>{endverbatim}

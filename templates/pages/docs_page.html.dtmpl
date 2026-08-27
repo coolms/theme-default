@@ -1,0 +1,39 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <div class="docs-page py-2">
+      <div class="row">
+        {include:`partials/docs-sidebar.html.dtmpl`}
+        <div class="docs-page__main col-lg-9">
+          <article class="docs-article">
+            <h1 class="docs-article__title">{var:page.title}</h1>
+
+            {if:page.toc}
+            <nav class="docs-toc card card-body bg-light mb-4" id="docs-toc" aria-label="On this page">
+              <span class="docs-toc__label text-muted small text-uppercase fw-semibold">On this page</span>
+              <ul class="docs-toc__list list-unstyled mb-0 mt-2" id="docs-toc-list">
+                {loop:page.toc}<li class="docs-toc__item docs-toc__lvl-{var:item.level}"><a class="docs-toc__link link-secondary" href="#{var:item.id}">{var:item.text}</a></li>{endloop}
+              </ul>
+            </nav>
+            {endif}
+
+            <div class="page-content docs-article__body" id="docs-content">
+              {var:page.body raw}
+            </div>
+
+            {if:page.extras.tags}
+              <div class="docs-article__tags mt-4">
+                {loop:page.extras.tags}<span class="badge text-bg-secondary me-1">{var:item}</span>{endloop}
+              </div>
+            {endif}
+          </article>
+
+          <nav class="docs-page__pager d-flex justify-content-between align-items-stretch gap-2 mt-5 pt-3 border-top" aria-label="Documentation pages">
+            {if:docs.prev}<a class="btn btn-outline-secondary text-start docs-page__prev" rel="prev" href="{var:docs.prev.url}"><span class="d-block small text-muted">← Previous</span>{var:docs.prev.title}</a>{endif}
+            {unless:docs.prev}<span></span>{endunless}
+            {if:docs.next}<a class="btn btn-outline-secondary text-end docs-page__next ms-auto" rel="next" href="{var:docs.next.url}"><span class="d-block small text-muted">Next →</span>{var:docs.next.title}</a>{endif}
+          </nav>
+        </div>
+      </div>
+    </div>
+  {endfill}
+{endinclude}

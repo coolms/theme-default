@@ -1,0 +1,1 @@
+{if:items}<ul class="vfs-listing">{loop:items:item}<li><a href="{var:item.href}">{var:item.title}</a></li>{endloop}</ul>{endif}

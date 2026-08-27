@@ -1,0 +1,149 @@
+{verbatim}<style>
+.cookie-consent{position:fixed;left:0;right:0;bottom:0;z-index:1080;background:#fff;border-top:1px solid #e5e7eb;box-shadow:0 -2px 14px rgba(0,0,0,.10);padding:.85rem 1rem}
+.cookie-consent[hidden]{display:none}
+/* Anything else pinned to the bottom-right (the visitor chat launcher) reads
+   --coolms-consent-height and lifts itself clear. A banner asking for consent
+   must not be the thing a visitor has to dismiss to reach support -- and it
+   GROWS when Customize opens, so the height is published, not assumed. */
+.cookie-consent__inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.25rem;justify-content:space-between}
+.cookie-consent__text{margin:0;font-size:.9rem;line-height:1.4;color:#374151;flex:1 1 320px}
+.cookie-consent__text a{color:#2563eb}
+.cookie-consent__actions{display:flex;gap:.5rem;flex-shrink:0;flex-wrap:wrap}
+.cookie-consent__btn{border:1px solid #d1d5db;background:#fff;color:#374151;border-radius:6px;padding:.45rem .95rem;font:inherit;font-size:.9rem;line-height:1.2;cursor:pointer}
+.cookie-consent__btn:hover{background:#f9fafb}
+.cookie-consent__btn--accept{background:#2563eb;border-color:#2563eb;color:#fff}
+.cookie-consent__btn--accept:hover{background:#1d4ed8}
+.cookie-consent__panel{max-width:1100px;margin:.85rem auto 0;border-top:1px solid #e5e7eb;padding-top:.85rem}
+.cookie-consent__panel[hidden]{display:none}
+.cookie-consent__cat{display:flex;gap:.65rem;align-items:flex-start;padding:.4rem 0}
+.cookie-consent__cat label{font-weight:600;font-size:.9rem;color:#111827}
+.cookie-consent__cat p{margin:.1rem 0 0;font-size:.82rem;color:#6b7280;line-height:1.35}
+.cookie-consent__cat input{margin-top:.2rem;width:1rem;height:1rem;flex-shrink:0}
+.cookie-consent__save{margin-top:.6rem;text-align:right}
+</style>
+<div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite" hidden>
+  <div class="cookie-consent__inner">
+    <p class="cookie-consent__text">We use cookies to make this site work and, with your consent, to improve it and tailor content. See our <a href="/privacy.html">privacy policy</a>.</p>
+    <div class="cookie-consent__actions">
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--decline" data-cc="decline">Decline all</button>
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--customize" data-cc="customize" aria-expanded="false" aria-controls="cookie-consent-panel">Customize</button>
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--accept" data-cc="accept">Accept all</button>
+    </div>
+  </div>
+  <div class="cookie-consent__panel" id="cookie-consent-panel" hidden>
+    <div class="cookie-consent__cat">
+      <input type="checkbox" id="cc-necessary" checked disabled />
+      <div><label for="cc-necessary">Necessary</label><p>Required for the site to function. Always on.</p></div>
+    </div>
+    <div class="cookie-consent__cat">
+      <input type="checkbox" id="cc-analytics" data-cat="analytics" />
+      <div><label for="cc-analytics">Analytics</label><p>Helps us understand how the site is used so we can improve it.</p></div>
+    </div>
+    <div class="cookie-consent__cat">
+      <input type="checkbox" id="cc-personalization" data-cat="personalization" />
+      <div><label for="cc-personalization">Personalization</label><p>Tailors the content you see to what is most relevant to you.</p></div>
+    </div>
+    <div class="cookie-consent__cat">
+      <input type="checkbox" id="cc-marketing" data-cat="marketing" />
+      <div><label for="cc-marketing">Marketing</label><p>Lets us measure and improve our marketing.</p></div>
+    </div>
+    <div class="cookie-consent__save">
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--accept" data-cc="save">Save choices</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  if (window.__coolmsConsentBound) return;
+  window.__coolmsConsentBound = true;
+  var KEY = 'coolms_consent';
+  var CATEGORIES = ['necessary', 'analytics', 'personalization', 'marketing'];
+  var banner = document.getElementById('cookie-consent');
+  var panel = document.getElementById('cookie-consent-panel');
+
+  /**
+   * Publish the banner's occupied height so bottom-anchored UI can clear it.
+   * Zero once it is hidden, so the chat drops back to its own margin.
+   */
+  function publishHeight(){
+    var h = (!banner || banner.hasAttribute('hidden'))
+      ? 0
+      : Math.ceil(banner.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--coolms-consent-height', h + 'px');
+  }
+
+  function getCookie(name){
+    var m = document.cookie.split('; ').filter(function(c){ return c.indexOf(name + '=') === 0; })[0];
+    return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
+  }
+
+  // The canonical grant check — mirrors the backend App\Core\...\RequestConsent
+  // (ADR-146). Reads the granular comma-list AND the legacy binary: a legacy
+  // `accepted` covers analytics + personalization (NOT marketing); `declined`/
+  // absent grants only necessary. Shared by the analytics / experiments /
+  // personalization gate partials via window.coolmsConsent.has().
+  function granted(cat){
+    var raw = String(getCookie(KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
+    if (cat === 'necessary') return true;
+    if (raw === 'accepted') return cat === 'analytics' || cat === 'personalization';
+    if (raw === '' || raw === 'declined') return false;
+    return raw.split(',').map(function(s){ return s.trim(); }).indexOf(cat) !== -1;
+  }
+  window.coolmsConsent = {
+    has: granted,
+    get raw(){ return getCookie(KEY); }
+  };
+
+  if (!banner) return;
+
+  function persist(value){
+    document.cookie = KEY + '=' + encodeURIComponent(value) + '; Max-Age=' + (60*60*24*180) + '; Path=/; SameSite=Lax';
+    // Flip data-consent so the deferred gate partials (which observe it) re-run.
+    document.documentElement.setAttribute('data-consent', value);
+    banner.setAttribute('hidden', '');
+    publishHeight();
+  }
+  function grantList(cats){
+    // necessary is always granted; keep canonical order.
+    return CATEGORIES.filter(function(c){ return c === 'necessary' || cats.indexOf(c) !== -1; }).join(',');
+  }
+
+  var existing = getCookie(KEY);
+  if (existing){
+    // Already decided — expose the choice for conditional scripts, stay hidden.
+    document.documentElement.setAttribute('data-consent', existing);
+    return;
+  }
+
+  banner.removeAttribute('hidden');
+  publishHeight();
+  // Customize opens a panel and the text wraps on a narrow screen: the height
+  // this reserves has to follow the banner rather than be guessed once.
+  if (typeof ResizeObserver !== 'undefined'){
+    new ResizeObserver(publishHeight).observe(banner);
+  } else {
+    window.addEventListener('resize', publishHeight);
+  }
+
+  banner.addEventListener('click', function(e){
+    var btn = e.target && e.target.closest ? e.target.closest('[data-cc]') : null;
+    if (!btn) return;
+    var action = btn.getAttribute('data-cc');
+    if (action === 'decline') { persist('necessary'); return; }
+    if (action === 'accept')  { persist(grantList(CATEGORIES)); return; }
+    if (action === 'customize'){
+      var open = panel.hasAttribute('hidden');
+      if (open){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      return;
+    }
+    if (action === 'save'){
+      var chosen = ['necessary'];
+      Array.prototype.forEach.call(panel.querySelectorAll('input[data-cat]'), function(input){
+        if (input.checked) chosen.push(input.getAttribute('data-cat'));
+      });
+      persist(grantList(chosen));
+    }
+  });
+})();
+</script>{endverbatim}

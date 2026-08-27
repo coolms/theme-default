@@ -1,0 +1,13 @@
+<section class="block block-steps py-5">
+  <div class="container">
+    {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+    <div class="row g-4">
+      {loop:block.items:step}
+        <div class="col-md-4">
+          <div class="h5">{var:step.title escape}</div>
+          <p class="text-muted" style="white-space: pre-line">{var:step.text escape}</p>
+        </div>
+      {endloop}
+    </div>
+  </div>
+</section>

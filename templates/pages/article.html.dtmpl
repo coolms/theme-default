@@ -1,0 +1,9 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <article class="py-2 prose">
+      <h1>{var:page.meta.title}</h1>
+      <div class="text-muted mb-3 small">{var:content.locale}</div>
+      {var:content.body raw}
+    </article>
+  {endfill}
+{endinclude}

@@ -1,0 +1,103 @@
+{if:experiments.count}{verbatim}<script>
+(function(){
+  if (window.__coolmsExpBound) return;
+  window.__coolmsExpBound = true;
+  var experiments = {endverbatim}{var:experiments.configJson raw}{verbatim};
+  if (!experiments || !experiments.length) return;
+
+  var CONSENT_KEY = 'coolms_consent';
+  function getCookie(name){
+    var m = document.cookie.split('; ').filter(function(c){ return c.indexOf(name + '=') === 0; })[0];
+    return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
+  }
+  function setCookie(name, value){
+    document.cookie = name + '=' + encodeURIComponent(value) + '; Max-Age=' + (60*60*24*365) + '; Path=/; SameSite=Lax';
+  }
+  function consented(){
+    // ADR-146 tiered consent — analytics category (exposure/conversion beacons).
+    // Legacy `accepted` grants analytics; the granular form is a comma-list.
+    var raw = String(getCookie(CONSENT_KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
+    if (raw === 'accepted') return true;
+    if (raw === '' || raw === 'declined') return false;
+    return raw.split(',').indexOf('analytics') !== -1;
+  }
+  // Weighted pick over a variant list (relative weights; total may be any sum).
+  function pick(variants){
+    var total = 0, i;
+    for (i = 0; i < variants.length; i++) total += Math.max(0, variants[i].weight || 0);
+    if (total <= 0) return variants[0].key;
+    var r = Math.random() * total, acc = 0;
+    for (i = 0; i < variants.length; i++){
+      acc += Math.max(0, variants[i].weight || 0);
+      if (r < acc) return variants[i].key;
+    }
+    return variants[variants.length - 1].key;
+  }
+
+  // Sticky assignment: a per-experiment cookie keeps the visitor in the same arm
+  // across visits. The assignment cookie is functional (not analytics), so it is
+  // set regardless of consent; only the exposure beacon below is consent-gated.
+  var assignments = {};
+  experiments.forEach(function(exp){
+    if (!exp.variants || !exp.variants.length) return;
+    var cookieName = 'coolms_exp_' + exp.key;
+    var variant = getCookie(cookieName);
+    var known = exp.variants.some(function(v){ return v.key === variant; });
+    if (!known){ variant = pick(exp.variants); setCookie(cookieName, variant); }
+    assignments[exp.key] = variant;
+    // Expose the arm to CSS (attribute selectors) + JS (the helper below).
+    document.documentElement.setAttribute('data-exp-' + exp.key, variant);
+  });
+  window.coolmsExperiments = assignments;
+  window.coolmsExperiment = function(key){ return assignments[key] || null; };
+
+  // Conversion beacon — fire when the experiment's goal is hit for the visitor's
+  // assigned arm. Consent-gated like the exposure beacon, and a no-op for any
+  // key the visitor wasn't bucketed into (e.g. a since-stopped experiment).
+  function convert(key){
+    var variant = assignments[key];
+    if (!variant || !consented()) return;
+    try {
+      fetch('/api/v1/experiments/conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: key, variant: variant }),
+        keepalive: true,
+        credentials: 'omit'
+      }).catch(function(){});
+    } catch (e) { /* best-effort */ }
+  }
+  // Imperative API for theme/page scripts: window.coolmsExperimentConvert('hero-cta').
+  window.coolmsExperimentConvert = convert;
+  // Declarative goal: any element carrying data-exp-goal="<key>" (or an ancestor
+  // of the click target) records a conversion when clicked — no custom JS needed.
+  document.addEventListener('click', function(e){
+    var el = e.target && e.target.closest ? e.target.closest('[data-exp-goal]') : null;
+    if (!el) return;
+    var key = el.getAttribute('data-exp-goal');
+    if (key) convert(key);
+  }, true);
+
+  // Exposure beacon — anonymous aggregate counts, consent-gated like analytics.
+  function report(){
+    Object.keys(assignments).forEach(function(key){
+      try {
+        fetch('/api/v1/experiments/exposure', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: key, variant: assignments[key] }),
+          keepalive: true,
+          credentials: 'omit'
+        }).catch(function(){});
+      } catch (e) { /* best-effort */ }
+    });
+  }
+  var reported = false;
+  function maybeReport(){ if (reported || !consented()) return; reported = true; report(); }
+  if (consented()){ maybeReport(); return; }
+  if (window.MutationObserver){
+    var obs = new MutationObserver(function(){ if (consented()){ maybeReport(); obs.disconnect(); } });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-consent'] });
+  }
+})();
+</script>{endverbatim}{endif}

@@ -1,0 +1,72 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <div class="search-page py-2">
+      <h1>Search</h1>
+
+      <form class="search-page__form my-3" method="get" action="/search" role="search">
+        {if:search.scopeActive}<input type="hidden" name="scope" value="{var:search.scopeValue}">{endif}
+        <div class="input-group">
+          <input type="search" class="form-control" name="q" value="{var:search.query}"
+                 placeholder="Search the site…" aria-label="Search">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+
+      {if:search.scopeActive}
+        <div class="search-scope alert alert-secondary py-2 px-3 d-flex justify-content-between align-items-center" role="status">
+          <span class="small">Searching in <strong>{var:search.scopeLabel}</strong></span>
+          <a class="small" href="{var:search.searchAllUrl}">Search everywhere →</a>
+        </div>
+      {endif}
+
+      {if:search.facets}
+        <div class="search-facets mb-3">
+          {loop:search.facets:group}
+            <div class="search-facets__group mb-2">
+              <span class="search-facets__label text-muted small me-2">{var:group.label}:</span>
+              {loop:group.values:facet}
+                {if:facet.active}<a class="btn btn-sm btn-primary me-1 mb-1" href="{var:facet.url}">{var:facet.label} <span class="badge text-bg-light">{var:facet.count}</span> ×</a>{endif}
+                {unless:facet.active}<a class="btn btn-sm btn-outline-secondary me-1 mb-1" href="{var:facet.url}">{var:facet.label} <span class="badge text-bg-light">{var:facet.count}</span></a>{endunless}
+              {endloop}
+            </div>
+          {endloop}
+          {if:search.filtersActive}
+            <a class="search-facets__clear small" href="{var:search.clearUrl}">Clear filters</a>
+          {endif}
+        </div>
+      {endif}
+
+      {if:search.hasResults}
+        <p class="search-page__count text-muted small">{var:search.total} result(s) for &ldquo;{var:search.query}&rdquo;</p>
+        <ul class="search-results list-unstyled mt-3">
+          {loop:search.results}
+            <li class="search-results__item mb-4">
+              <h2 class="h5 mb-1"><a href="{var:item.url}">{var:item.title}</a></h2>
+              <div class="text-muted small search-results__meta">
+                {if:item.type}<span class="search-results__type">{var:item.type}</span>{endif}
+                {if:item.publishDate}<span class="search-results__date"> · <time datetime="{var:item.publishDate}">{var:item.publishDate}</time></span>{endif}
+              </div>
+              {if:item.excerpt}<p class="search-results__excerpt mt-1 mb-0">{var:item.excerpt}</p>{endif}
+            </li>
+          {endloop}
+        </ul>
+
+        {if:search.pagination.multiPage}
+          <nav class="search-page__pager d-flex justify-content-between align-items-center mt-4" aria-label="Search result pages">
+            {if:search.pagination.hasPrev}<a class="btn btn-sm btn-outline-secondary" rel="prev" href="{var:search.pagination.prevUrl}">← Previous</a>{endif}
+            <span class="text-muted small">Page {var:search.pagination.page} of {var:search.pagination.totalPages}</span>
+            {if:search.pagination.hasNext}<a class="btn btn-sm btn-outline-secondary" rel="next" href="{var:search.pagination.nextUrl}">Next →</a>{endif}
+          </nav>
+        {endif}
+      {endif}
+
+      {if:search.noResults}
+        <p class="search-page__empty text-muted mt-3">No results for &ldquo;{var:search.query}&rdquo;. Try a different search.</p>
+      {endif}
+
+      {unless:search.hasQuery}
+        <p class="search-page__hint text-muted mt-3">Enter a search term above to find content across the site.</p>
+      {endunless}
+    </div>
+  {endfill}
+{endinclude}

@@ -1,0 +1,11 @@
+<section class="block block-accordion py-5">
+  {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+  <div class="block-accordion__list col-lg-8 mx-auto">
+    {loop:block.items:item}
+      <details class="block-accordion__item border rounded mb-2">
+        <summary class="px-3 py-2 fw-semibold">{var:item.title escape}</summary>
+        {if:item.body}<div class="px-3 pb-3 pt-1 text-muted" style="white-space: pre-line">{var:item.body escape}</div>{endif}
+      </details>
+    {endloop}
+  </div>
+</section>

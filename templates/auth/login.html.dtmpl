@@ -1,0 +1,33 @@
+{include:`layouts/auth.html.dtmpl`}
+  {fill:content}
+    <h1 class="h4 mb-4">Sign in</h1>
+
+    {if:error.reason}
+      {unless:flashes.error}
+        <div class="alert alert-warning">
+          Please sign in to continue.
+        </div>
+      {endunless}
+    {endif}
+
+    {loop:flashes.error}
+      <div class="alert alert-danger">{var:item.message}</div>
+    {endloop}
+    {loop:flashes.success}
+      <div class="alert alert-success">{var:item.message}</div>
+    {endloop}
+
+    {widget:form:`identity.login`}
+
+    {if:routes.register}
+      <p class="mt-3 text-center text-muted small">
+        No account? <a href="{var:routes.register}">Register</a>
+      </p>
+    {endif}
+    {if:routes.passwordReset}
+      <p class="text-center text-muted small">
+        <a href="{var:routes.passwordReset}">Forgot password?</a>
+      </p>
+    {endif}
+  {endfill}
+{endinclude}

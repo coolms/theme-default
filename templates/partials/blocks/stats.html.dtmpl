@@ -1,0 +1,13 @@
+<section class="block block-stats py-5">
+  <div class="container">
+    {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+    <div class="row text-center g-4">
+      {loop:block.items:stat}
+        <div class="col-6 col-md-3">
+          <div class="display-5 fw-bold">{var:stat.value escape}</div>
+          <div class="text-muted">{var:stat.label escape}</div>
+        </div>
+      {endloop}
+    </div>
+  </div>
+</section>

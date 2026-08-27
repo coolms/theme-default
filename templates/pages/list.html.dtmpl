@@ -1,0 +1,12 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <h1>{var:page.meta.title}</h1>
+    <ul class="list-group mt-3">
+      {loop:navi.children}
+        <li class="list-group-item">
+          <a href="{var:item.url}">{var:item.label}</a>
+        </li>
+      {endloop}
+    </ul>
+  {endfill}
+{endinclude}

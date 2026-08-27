@@ -1,0 +1,5 @@
+<section class="block block-hero py-5 text-center">
+  <h1 class="display-5 fw-semibold">{var:block.title escape}</h1>
+  {if:block.subtitle}<p class="lead text-muted col-lg-8 mx-auto">{var:block.subtitle escape}</p>{endif}
+  {if:block.ctaUrl}<p class="mt-4 mb-0"><a class="btn btn-primary btn-lg" href="{var:block.ctaUrl escape}">{var:block.ctaLabel escape}</a></p>{endif}
+</section>

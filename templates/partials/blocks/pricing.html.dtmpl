@@ -1,0 +1,20 @@
+<section class="block block-pricing py-5">
+  <div class="container">
+    {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+    <div class="row g-4 justify-content-center">
+      {loop:block.items:plan}
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center d-flex flex-column">
+              <h3 class="card-title h5">{var:plan.name escape}</h3>
+              <div class="display-6 fw-bold">{var:plan.price escape}</div>
+              {if:plan.period}<div class="text-muted small mb-3">{var:plan.period escape}</div>{endif}
+              {if:plan.features}<p class="text-start flex-grow-1" style="white-space: pre-line">{var:plan.features escape}</p>{endif}
+              {if:plan.ctaUrl}<a class="btn btn-primary mt-3" href="{var:plan.ctaUrl escape}">{var:plan.ctaLabel escape}</a>{endif}
+            </div>
+          </div>
+        </div>
+      {endloop}
+    </div>
+  </div>
+</section>

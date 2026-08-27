@@ -1,0 +1,8 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <article class="py-2 prose">
+      <h1>{var:page.title}</h1>
+      {var:content raw}
+    </article>
+  {endfill}
+{endinclude}

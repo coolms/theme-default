@@ -1,0 +1,97 @@
+<section id="comments" class="comments mt-5">
+  <h2 class="comments__title h4 mb-4">{if:count=1}1 Comment{else}{var:count} Comments{endif}</h2>
+  {if:count}
+    <div class="comments__list mb-5">
+      {loop:comments:c}
+        <article class="comment mb-4">
+          <header class="comment__meta small text-muted mb-1">
+            <span class="comment__author fw-semibold text-body">{var:c.authorName escape}</span>
+            <time datetime="{var:c.datetime escape}">{var:c.date escape}</time>
+          </header>
+          <div class="comment__body">{var:c.body escape php.nl2br}</div>
+        </article>
+      {endloop}
+    </div>
+  {else}
+    <p class="comments__empty text-muted">No comments yet. Be the first to comment.</p>
+  {endif}
+  <div class="comments__form">
+    <h3 class="h5 mb-3">Leave a comment</h3>
+    <form class="comment-form" data-coolms-comments data-post-id="{var:postId escape}" novalidate>
+      <div class="mb-3">
+        <label class="form-label w-100">Name
+          <input class="form-control" name="authorName" type="text" maxlength="120" autocomplete="name" required>
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label w-100">Email <span class="text-muted">(optional, not published)</span>
+          <input class="form-control" name="authorEmail" type="email" maxlength="255" autocomplete="email">
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label w-100">Comment
+          <textarea class="form-control" name="body" rows="4" maxlength="4000" required></textarea>
+        </label>
+      </div>
+      <div class="comment-form__hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+        <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <button class="btn btn-primary" type="submit">Post comment</button>
+      <p class="comment-form__status mt-3 mb-0" role="status" hidden></p>
+      <noscript><p class="text-muted small mt-2">JavaScript is required to post a comment.</p></noscript>
+    </form>
+  </div>
+</section>
+{verbatim}
+<script>
+(function () {
+  if (window.__coolmsCommentsBound) { return; }
+  window.__coolmsCommentsBound = true;
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || !form.matches || !form.matches('[data-coolms-comments]')) { return; }
+    e.preventDefault();
+    var status = form.querySelector('.comment-form__status');
+    var button = form.querySelector('button[type=submit]');
+    var fd = new FormData(form);
+    var show = function (msg, ok) {
+      if (!status) { return; }
+      status.hidden = false;
+      status.textContent = msg;
+      status.className = 'comment-form__status mt-3 mb-0 ' + (ok ? 'text-success' : 'text-danger');
+    };
+    var get = function (k) { var v = fd.get(k); return (v == null ? '' : String(v)).trim(); };
+    var payload = {
+      postId: form.getAttribute('data-post-id'),
+      authorName: get('authorName'),
+      body: get('body'),
+      authorEmail: get('authorEmail'),
+      website: fd.get('website') || ''
+    };
+    if (!payload.authorName || !payload.body) {
+      show('Please fill in your name and comment.', false);
+      return;
+    }
+    if (button) { button.disabled = true; }
+    fetch('/api/v1/comments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/ld+json', 'Accept': 'application/ld+json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      if (button) { button.disabled = false; }
+      if (res.ok) {
+        form.reset();
+        show('Thanks! Your comment is awaiting moderation.', true);
+      } else if (res.status === 429) {
+        show('You are posting too fast. Please try again in a few minutes.', false);
+      } else {
+        show('Sorry, your comment could not be posted.', false);
+      }
+    }).catch(function () {
+      if (button) { button.disabled = false; }
+      show('Sorry, your comment could not be posted.', false);
+    });
+  });
+})();
+</script>
+{endverbatim}

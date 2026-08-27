@@ -1,0 +1,349 @@
+// CoolMS Default Theme — Bootstrap 5 entry point
+
+// Bootstrap variable overrides (customize before importing)
+// $primary: #3d6fcd;
+// $font-family-base: 'Inter', sans-serif;
+
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap";
+
+// Custom theme styles
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+// Navbar active link indicator
+.navbar-nav .nav-link.active {
+    font-weight: 600;
+}
+
+// Card subtle shadow in auth forms
+.card {
+    border: none;
+    border-radius: 0.75rem;
+}
+
+// ── Media gallery widget ({widget:media:<collection-uuid> type=grid|slider|list})
+// The MediaWidgetRenderer emits the markup + a `--cols` custom property; the
+// theme owns the layout. Without these rules the items stack full-width.
+.media-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    gap: 0.75rem;
+
+    .media-gallery-item img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover; // honours the inline `object-position` focal point
+        border-radius: 0.5rem;
+    }
+}
+
+.media-slider {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+
+    .media-slide {
+        flex: 0 0 auto;
+        width: min(100%, 480px);
+        scroll-snap-align: start;
+    }
+    .media-slide img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
+}
+
+.media-gallery-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .media-list-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        img {
+            flex: 0 0 auto;
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+        }
+    }
+}
+
+// Alignment utilities shared by media galleries + single-asset embeds.
+.cms-media-align-center { margin-inline: auto; }
+.cms-media-align-left   { margin-inline-end: auto; }
+.cms-media-align-right  { margin-inline-start: auto; }
+
+// ── Editor code (Track B): inline `<code>` + fenced `<pre><code>` blocks.
+// Bootstrap reboot gives these a monospace baseline; these rules give the
+// block the expected "code box" affordance (surface, padding, h-scroll) so a
+// pasted snippet reads as code, not body text.
+:not(pre) > code {
+    padding: 0.15em 0.35em;
+    background: var(--bs-secondary-bg, #e9ecef);
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+}
+
+pre {
+    background: #282c34; // atom-one-dark surface (shared with the admin editor)
+    color: #abb2bf;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    line-height: 1.5;
+
+    code {
+        background: none;
+        padding: 0;
+        color: inherit;
+        font-size: 0.875em;
+    }
+}
+
+// ── Syntax-highlight token palette (atom-one-dark). highlight.js paints
+// `<span class="hljs-…">` tokens into `<pre><code>` at runtime (see
+// assets/js/code-highlight.js); these colours are the same set the admin
+// editor uses so authoring and published output match. Scoped under `pre code`
+// so inline `<code>` is unaffected.
+pre code {
+    .hljs-comment, .hljs-quote { color: #5c6370; font-style: italic; }
+    .hljs-doctag, .hljs-keyword, .hljs-formula { color: #c678dd; }
+    .hljs-section, .hljs-name, .hljs-selector-tag, .hljs-deletion, .hljs-subst { color: #e06c75; }
+    .hljs-literal { color: #56b6c2; }
+    .hljs-string, .hljs-regexp, .hljs-addition, .hljs-attribute, .hljs-meta .hljs-string { color: #98c379; }
+    .hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-type,
+    .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-number { color: #d19a66; }
+    .hljs-symbol, .hljs-bullet, .hljs-link, .hljs-meta, .hljs-selector-id, .hljs-title { color: #61aeee; }
+    .hljs-built_in, .hljs-title.class_, .hljs-class .hljs-title { color: #e6c07b; }
+    .hljs-emphasis { font-style: italic; }
+    .hljs-strong { font-weight: 700; }
+    .hljs-link { text-decoration: underline; }
+}
+
+// ── Multi-language code tabs ({div.code-tabs} wrapping several `<pre>` variants).
+// Progressively enhanced by code-highlight.js into a tab strip; without JS the
+// `<pre>` panels stack and stay readable.
+.code-tabs {
+    margin: 1rem 0;
+
+    > pre { margin: 0; border-radius: 0; } // panels share one rounded shell
+
+    .code-tabs__bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        padding: 4px 4px 0;
+        background: #21252b;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+    // Round the first panel's bottom corners (the bar owns the top ones).
+    .code-tabs__bar + pre { border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+
+    .code-tabs__tab {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+        color: #abb2bf;
+        background: transparent;
+        border: 0;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        cursor: pointer;
+
+        &:hover { background: rgba(255, 255, 255, 0.06); }
+        &--active { background: #282c34; color: #fff; }
+    }
+}
+
+// ── Mermaid diagrams (Track B #7). A `<pre><code class="language-mermaid">`
+// block is swapped client-side (assets/js/mermaid-render.js) for this wrapper
+// holding the rendered SVG. Centred, fluid, with a light surface so the
+// diagram reads on the page; the inline SVG scales to the column width.
+.mermaid-diagram {
+    margin: 1rem 0;
+    text-align: center;
+
+    svg {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+// Heading anchors + table of contents (Track B #6). Every content h2/h3 is
+// given a server-rendered slug id + an appended permalink anchor; the docs
+// template renders the TOC from `page.toc`. The anchor stays invisible until
+// its heading is hovered/focused, so deep-linking is available without clutter.
+.page-content {
+    h2,
+    h3,
+    h4 {
+        scroll-margin-top: 1.5rem;
+    }
+}
+
+.heading-anchor {
+    margin-left: 0.4rem;
+    color: var(--bs-secondary-color, #6c757d);
+    font-weight: 400;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+}
+
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+h4:hover .heading-anchor,
+.heading-anchor:focus {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+// Nested (h3) TOC entries indent under their h2 parent — replaces the Bootstrap
+// `ms-3` the old client-side script applied.
+.docs-toc__lvl-3 {
+    margin-left: 1rem;
+}
+
+// ── Callouts / admonitions (Track B #5). `<div class="callout callout-note">`
+// boxes authored in the editor. A tinted surface + a coloured left rule per
+// kind (note = primary, warning = warning, tip = success) using Bootstrap 5.3
+// subtle-background tokens, with literal fallbacks for themes that don't define
+// them. First/last children lose their margins so the box hugs its content.
+.callout {
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 4px solid var(--bs-border-color, #dee2e6);
+    border-radius: 0.375rem;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+
+    > :first-child { margin-top: 0; }
+    > :last-child { margin-bottom: 0; }
+}
+
+.callout-note {
+    border-left-color: var(--bs-primary, #0d6efd);
+    background: var(--bs-primary-bg-subtle, #cfe2ff);
+}
+
+.callout-warning {
+    border-left-color: var(--bs-warning, #ffc107);
+    background: var(--bs-warning-bg-subtle, #fff3cd);
+}
+
+.callout-tip {
+    border-left-color: var(--bs-success, #198754);
+    background: var(--bs-success-bg-subtle, #d1e7dd);
+}
+
+// Callout title line — `CalloutTitleProcessor` prepends
+// `<div class="callout__title"><svg class="callout__icon">…</svg>
+// <span class="callout__label">Note</span></div>` per box, localized in the
+// request locale. Icon is inline SVG (theme ships no icon font) at 1em,
+// `currentColor`-filled so the per-kind title colour drives it. Bootstrap 5.3
+// `-text-emphasis` tokens give the label/icon enough contrast on the subtle bg.
+.callout__title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.callout__icon {
+    flex: 0 0 auto;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.callout-note .callout__title { color: var(--bs-primary-text-emphasis, #052c65); }
+.callout-warning .callout__title { color: var(--bs-warning-text-emphasis, #664d03); }
+.callout-tip .callout__title { color: var(--bs-success-text-emphasis, #0a3622); }
+
+// Responsive video / iframe embed ({widget:embed:video|iframe …} →
+// embed.html.dtmpl). Bootstrap's .ratio holds the aspect box; this only adds
+// spacing + rounding.
+.cms-embed {
+    margin: 1.5rem 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+
+    iframe {
+        border: 0;
+    }
+}
+
+// Provider audio embed ({widget:embed:audio …} → embed_audio.html.dtmpl): a
+// fixed-height player iframe (Spotify / SoundCloud), full width in the column.
+.cms-embed-audio {
+    margin: 1.5rem 0;
+
+    iframe {
+        width: 100%;
+        border: 0;
+        border-radius: 0.5rem;
+    }
+}
+
+// Direct audio file ({widget:embed:audio …} of a media file →
+// embed_audio_file.html.dtmpl).
+.cms-embed-audio-file {
+    display: block;
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+// Content tables (Track B #2). Editor-authored + Markdown-imported tables
+// render as bordered, zebra-striped blocks; the wrapper scrolls horizontally
+// on narrow viewports so a wide table never breaks the layout. Cell alignment
+// rides Bootstrap `text-*` classes (set on td/th), already covered by reboot.
+// Every content template renders `page.body` inside an `<article>` (docs also
+// wraps it in `.page-content`); both are targeted so all surfaces are covered.
+article table,
+.page-content table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+
+    th,
+    td {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--bs-border-color, #dee2e6);
+        vertical-align: top;
+    }
+
+    thead th {
+        background: var(--bs-tertiary-bg, #f8f9fa);
+        text-align: start;
+        font-weight: 600;
+        border-bottom: 2px solid var(--bs-border-color, #dee2e6);
+    }
+
+    tbody tr:nth-of-type(odd) {
+        background: var(--bs-tertiary-bg, #f8f9fa);
+    }
+}

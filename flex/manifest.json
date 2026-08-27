@@ -1,0 +1,10 @@
+{
+    "bundles": {
+        "CoolMS\\ThemeDefault\\ThemeDefaultBundle": ["all"]
+    },
+    "copy-from-recipe": {
+    },
+    "env": {
+    },
+    "aliases": ["coolms-theme-default", "theme-default"]
+}

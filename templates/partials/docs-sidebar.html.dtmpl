@@ -1,0 +1,17 @@
+<aside class="docs-sidebar col-lg-3 mb-4">
+  <form class="docs-sidebar__search mb-3" method="get" action="/search" role="search">
+    <input type="hidden" name="scope" value="docs">
+    <input type="search" class="form-control form-control-sm" name="q"
+           placeholder="Search docs…" aria-label="Search documentation">
+  </form>
+  <nav class="docs-sidebar__nav" aria-label="Documentation">
+    <div class="list-group list-group-flush docs-sidebar__sticky">
+      {if:docs.homeActive}<a class="list-group-item list-group-item-action active" aria-current="page" href="{var:docs.home.url}">{var:docs.home.title}</a>{endif}
+      {unless:docs.homeActive}<a class="list-group-item list-group-item-action docs-sidebar__home" href="{var:docs.home.url}">{var:docs.home.title}</a>{endunless}
+      {loop:docs.sidebar}
+        {if:item.active}<a class="list-group-item list-group-item-action active" aria-current="page" href="{var:item.url}">{var:item.title}</a>{endif}
+        {unless:item.active}<a class="list-group-item list-group-item-action" href="{var:item.url}">{var:item.title}</a>{endunless}
+      {endloop}
+    </div>
+  </nav>
+</aside>

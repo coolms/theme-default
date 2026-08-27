@@ -1,0 +1,31 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <div class="blog-index py-2">
+      <h1>{var:collection.title default=`Blog`}</h1>
+      {if:collection.hasPosts}
+        <ul class="blog-index__list list-unstyled mt-3">
+          {loop:posts}
+            <li class="blog-index__item mb-4">
+              <h2 class="h4 mb-1"><a href="{var:item.url}">{var:item.title}</a></h2>
+              <div class="text-muted small blog-index__meta">
+                {if:item.author}<span class="blog-index__author">By {var:item.author}</span>{endif}
+                {if:item.publishDate}<span class="blog-index__date"> · <time datetime="{var:item.publishDate}">{var:item.publishDate}</time></span>{endif}
+              </div>
+              {if:item.excerpt}<p class="blog-index__excerpt mt-1 mb-0">{var:item.excerpt}</p>{endif}
+            </li>
+          {endloop}
+        </ul>
+        {if:pagination.multiPage}
+          <nav class="blog-index__pager d-flex justify-content-between align-items-center mt-4" aria-label="Blog pages">
+            {if:pagination.hasPrev}<a class="btn btn-sm btn-outline-secondary" rel="prev" href="{var:pagination.prevUrl}">← Newer</a>{endif}
+            <span class="text-muted small">Page {var:pagination.page} of {var:pagination.totalPages}</span>
+            {if:pagination.hasNext}<a class="btn btn-sm btn-outline-secondary" rel="next" href="{var:pagination.nextUrl}">Older →</a>{endif}
+          </nav>
+        {endif}
+      {endif}
+      {if:collection.isEmpty}
+        <p class="text-muted mt-3">No posts published yet.</p>
+      {endif}
+    </div>
+  {endfill}
+{endinclude}

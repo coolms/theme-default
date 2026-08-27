@@ -1,0 +1,17 @@
+{if:crumbs}
+<nav aria-label="breadcrumb">
+  <ol{loop:config.attr} {var:item.key}="{var:item.value}"{endloop}>
+    {loop:crumbs:crumb}
+      {if:crumb.isCurrent}
+        <li{loop:config.active_attr} {var:item.key}="{var:item.value}"{endloop}
+           aria-current="page">{var:crumb.label}</li>
+      {endif}
+      {unless:crumb.isCurrent}
+        <li{loop:config.item_attr} {var:item.key}="{var:item.value}"{endloop}>
+          <a href="{var:crumb.href}">{var:crumb.label}</a>
+        </li>
+      {endunless}
+    {endloop}
+  </ol>
+</nav>
+{endif}

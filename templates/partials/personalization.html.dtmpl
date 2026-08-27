@@ -1,0 +1,64 @@
+{if:personalization.count}{verbatim}<script>
+(function(){
+  if (window.__coolmsPersoBound) return;
+  window.__coolmsPersoBound = true;
+  var rules = {endverbatim}{var:personalization.rulesJson raw}{verbatim};
+  if (!rules || !rules.length) return;
+
+  var CONSENT_KEY = 'coolms_consent';
+  function getCookie(name){
+    var m = document.cookie.split('; ').filter(function(c){ return c.indexOf(name + '=') === 0; })[0];
+    return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
+  }
+  // ADR-146 tiered consent — the distinct `personalization` category (the
+  // me/segments endpoint enforces the same server-side). Legacy `accepted` grants
+  // personalization; the granular form is a comma-list of categories.
+  function consented(){
+    var raw = String(getCookie(CONSENT_KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
+    if (raw === 'accepted') return true;
+    if (raw === '' || raw === 'declined') return false;
+    return raw.split(',').indexOf('personalization') !== -1;
+  }
+
+  // Apply the matching variant to every element marked data-perso-slot="<slot>".
+  // Declarative + content-free: the theme styles
+  // [data-perso-slot="…"][data-perso-variant="…"] (or shows/hides variant
+  // children); nothing is injected here, so a stale/absent segment is a no-op and
+  // the default content simply stays.
+  function esc(v){ return (window.CSS && CSS.escape) ? CSS.escape(v) : String(v).replace(/["\\]/g, '\\$&'); }
+  function apply(segments){
+    var seg = {}; segments.forEach(function(s){ seg[s] = true; });
+    var applied = {};
+    rules.forEach(function(r){
+      if (!r || !r.segment || !r.slot || !seg[r.segment]) return;
+      if (applied[r.slot]) return; // first matching rule per slot wins
+      applied[r.slot] = r.variant;
+      var els = document.querySelectorAll('[data-perso-slot="' + esc(r.slot) + '"]');
+      for (var i = 0; i < els.length; i++){ els[i].setAttribute('data-perso-variant', r.variant); }
+    });
+    window.coolmsPersonalization = { segments: segments, applied: applied };
+    document.documentElement.setAttribute('data-perso-ready', '1');
+  }
+
+  // Fetch THIS visitor's own segment keys (consent-gated server-side; returns
+  // [] without analytics consent). Best-effort — any failure leaves the default
+  // content untouched. The SSR body never varied by segment, so the shared page
+  // cache stays valid; only this client call is per-visitor.
+  function run(){
+    try {
+      fetch('/api/v1/analytics/me/segments', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .then(function(res){ return res.ok ? res.json() : { segments: [] }; })
+        .then(function(data){ apply((data && data.segments) || []); })
+        .catch(function(){});
+    } catch (e) { /* best-effort */ }
+  }
+
+  if (consented()){ run(); return; }
+  // Defer until consent is granted (the banner flips data-consent), mirroring the
+  // experiments exposure gate.
+  if (window.MutationObserver){
+    var obs = new MutationObserver(function(){ if (consented()){ obs.disconnect(); run(); } });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-consent'] });
+  }
+})();
+</script>{endverbatim}{endif}

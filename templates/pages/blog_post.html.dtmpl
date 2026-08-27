@@ -1,0 +1,21 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <article class="py-2 blog-post">
+      <h1>{var:page.title}</h1>
+      <div class="text-muted small mb-3 blog-post__meta">
+        {if:page.extras.author}<span class="blog-post__author">By {var:page.extras.author}</span>{endif}
+        {if:page.extras.publishDate}<span class="blog-post__date"> · <time datetime="{var:page.extras.publishDate}">{var:page.extras.publishDate}</time></span>{endif}
+      </div>
+      <div class="page-content blog-post__body">
+        {var:page.body raw}
+      </div>
+      {if:page.extras.tags}
+        <div class="blog-post__tags mt-4">
+          {loop:page.extras.tags}<span class="badge text-bg-secondary me-1">{var:item}</span>{endloop}
+        </div>
+      {endif}
+    </article>
+    {widget:social_share}
+    {widget:comments}
+  {endfill}
+{endinclude}

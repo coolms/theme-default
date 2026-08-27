@@ -1,0 +1,709 @@
+{verbatim}<style>
+/* Bottom offset clears the cookie banner while it is up (it publishes its own
+   height) and collapses to the plain margin once a visitor has answered. */
+.coolms-lc{position:fixed;right:18px;bottom:calc(18px + var(--coolms-consent-height, 0px));z-index:1090;font-family:inherit;transition:bottom .2s ease}
+.coolms-lc__launcher{display:inline-flex;align-items:center;gap:.5rem;border:0;border-radius:999px;background:#2563eb;color:#fff;padding:.7rem 1.1rem;font:inherit;font-size:.95rem;line-height:1;cursor:pointer;box-shadow:0 6px 20px rgba(37,99,235,.35)}
+.coolms-lc__launcher:hover{background:#1d4ed8}
+.coolms-lc__launcher svg{width:18px;height:18px;fill:currentColor}
+.coolms-lc__panel{display:none;flex-direction:column;width:340px;max-width:calc(100vw - 36px);height:460px;max-height:calc(100vh - 36px);background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.coolms-lc[data-open="1"] .coolms-lc__panel{display:flex}
+.coolms-lc[data-open="1"] .coolms-lc__launcher{display:none}
+.coolms-lc__head{display:flex;align-items:center;justify-content:space-between;background:#2563eb;color:#fff;padding:.7rem .9rem;flex-shrink:0}
+.coolms-lc__title{margin:0;font-size:.95rem;font-weight:600}
+.coolms-lc__close{border:0;background:transparent;color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;padding:0 .25rem}
+.coolms-lc__body{flex:1 1 auto;overflow-y:auto;padding:.85rem;background:#f9fafb}
+.coolms-lc__msgs{display:flex;flex-direction:column;gap:.4rem}
+.coolms-lc__msg{max-width:80%;padding:.45rem .7rem;border-radius:12px;font-size:.88rem;line-height:1.35;word-wrap:break-word}
+.coolms-lc__msg--them{align-self:flex-start;background:#fff;border:1px solid #e5e7eb;color:#111827;border-bottom-left-radius:3px}
+.coolms-lc__msg--me{align-self:flex-end;background:#2563eb;color:#fff;border-bottom-right-radius:3px}
+.coolms-lc__msg--sys{align-self:center;background:transparent;color:#6b7280;font-size:.78rem;font-style:italic}
+.coolms-lc__form{padding:.85rem;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto}
+.coolms-lc__form p{margin:0 0 .15rem;font-size:.85rem;color:#374151}
+.coolms-lc__input{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:.5rem .65rem;font:inherit;font-size:.88rem;box-sizing:border-box}
+.coolms-lc__input:focus{outline:2px solid #93c5fd;outline-offset:-1px;border-color:#2563eb}
+.coolms-lc__textarea{resize:vertical;min-height:4.5rem;font-family:inherit;line-height:1.4}
+.coolms-lc__fields{display:flex;flex-direction:column;gap:.5rem}
+.coolms-lc__phone{display:flex;gap:.4rem}
+.coolms-lc__country{flex:0 0 auto;max-width:46%;border:1px solid #d1d5db;border-radius:8px;padding:.5rem .4rem;font:inherit;font-size:.82rem;background:#fff;box-sizing:border-box}
+.coolms-lc__country:focus{outline:2px solid #93c5fd;outline-offset:-1px;border-color:#2563eb}
+.coolms-lc__phone .coolms-lc__input{flex:1 1 auto;min-width:0}
+.coolms-lc__foot{display:flex;flex-direction:column;gap:.4rem;padding:.6rem;border-top:1px solid #e5e7eb;background:#fff;flex-shrink:0}
+.coolms-lc__inrow{display:flex;gap:.4rem;align-items:center}
+.coolms-lc__send{border:0;border-radius:8px;background:#2563eb;color:#fff;padding:.5rem .9rem;font:inherit;font-size:.88rem;cursor:pointer}
+.coolms-lc__send:hover{background:#1d4ed8}
+.coolms-lc__send:disabled{background:#9ca3af;cursor:default}
+.coolms-lc__attach{flex:0 0 auto;border:0;border-radius:8px;background:#eef2ff;color:#2563eb;padding:.45rem .55rem;font-size:1rem;line-height:1;cursor:pointer}
+.coolms-lc__attach:hover{background:#e0e7ff}
+.coolms-lc__pending{display:flex;flex-wrap:wrap;gap:.3rem}
+.coolms-lc__chip{display:inline-flex;align-items:center;gap:.25rem;background:#eef2ff;color:#3730a3;border-radius:999px;padding:.2rem .5rem;font-size:.78rem;max-width:100%;word-break:break-all}
+.coolms-lc__chip--up{background:#f3f4f6;color:#6b7280;font-style:italic}
+.coolms-lc__chipx{border:0;background:transparent;color:inherit;font-size:.95rem;line-height:1;cursor:pointer;padding:0}
+.coolms-lc__txt{white-space:pre-wrap}
+.coolms-lc__atts{display:flex;flex-direction:column;gap:.35rem;margin-top:.35rem}
+.coolms-lc__thumb{max-width:180px;max-height:180px;border-radius:8px;display:block}
+.coolms-lc__file{display:inline-flex;align-items:center;gap:.3rem;border:1px solid #d1d5db;background:#fff;color:#2563eb;border-radius:8px;padding:.3rem .55rem;font:inherit;font-size:.8rem;cursor:pointer;text-align:left;max-width:100%;word-break:break-all}
+.coolms-lc__file--me{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.15);color:#fff}
+.coolms-lc__file:hover{filter:brightness(.97)}
+.coolms-lc__btn{border:0;border-radius:8px;background:#2563eb;color:#fff;padding:.55rem .9rem;font:inherit;font-size:.9rem;cursor:pointer}
+.coolms-lc__btn:hover{background:#1d4ed8}
+.coolms-lc__btn:disabled{background:#9ca3af;cursor:default}
+.coolms-lc__err{color:#b91c1c;font-size:.8rem;margin:.1rem 0 0}
+.coolms-lc [hidden]{display:none!important}
+</style>
+<div class="coolms-lc" id="coolms-lc" data-open="0" aria-live="polite">
+  <button type="button" class="coolms-lc__launcher" data-lc="open" aria-label="Open chat">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.2 1 4.2 2.7 5.7-.1 1.2-.5 2.6-1.4 3.6-.2.2-.1.6.2.6 1.9 0 3.4-.8 4.4-1.6 1.2.4 2.6.7 4.1.7 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>
+    <span>Chat with us</span>
+  </button>
+  <div class="coolms-lc__panel" role="dialog" aria-label="Live chat">
+    <div class="coolms-lc__head">
+      <p class="coolms-lc__title">Chat with us</p>
+      <button type="button" class="coolms-lc__close" data-lc="close" aria-label="Close chat">&times;</button>
+    </div>
+    <form class="coolms-lc__form" data-lc="prechat" hidden>
+      <p>Hi! Leave your details and a message — we'll get right back to you.</p>
+      <!-- Filled from the form definition (GET /config -> items). The fields a
+           visitor sees, their types, their order and their words are declared
+           on the server; this is the surface that draws them. The fallback
+           markup below is used only when an older server sends no items. -->
+      <div class="coolms-lc__fields" data-lc="fields"></div>
+      <template data-lc="fallback-fields">
+        <input class="coolms-lc__input" data-lc="f-name" type="text" placeholder="Your name" autocomplete="name">
+        <input class="coolms-lc__input" data-lc="f-email" type="email" placeholder="Your email" autocomplete="email">
+        <div class="coolms-lc__phone" data-lc="phone-group" hidden>
+          <select class="coolms-lc__country" data-lc="country" aria-label="Country"></select>
+          <input class="coolms-lc__input" data-lc="f-phone" type="tel" inputmode="tel" placeholder="Phone" autocomplete="tel">
+        </div>
+        <textarea class="coolms-lc__input coolms-lc__textarea" data-lc="f-message" rows="3"
+                  placeholder="How can we help?"></textarea>
+      </template>
+      <button type="submit" class="coolms-lc__btn" data-lc="start">Start chat</button>
+      <p class="coolms-lc__err" data-lc="prechat-err" hidden></p>
+    </form>
+    <div class="coolms-lc__body" data-lc="body" hidden>
+      <div class="coolms-lc__msgs" data-lc="msgs"></div>
+    </div>
+    <form class="coolms-lc__foot" data-lc="composer" hidden>
+      <div class="coolms-lc__pending" data-lc="pending" hidden></div>
+      <p class="coolms-lc__err" data-lc="composer-err" hidden></p>
+      <div class="coolms-lc__inrow">
+        <button type="button" class="coolms-lc__attach" data-lc="attach" aria-label="Attach a file" title="Attach a file">📎</button>
+        <input class="coolms-lc__file-input" data-lc="file" type="file" multiple hidden>
+        <input class="coolms-lc__input" data-lc="text" type="text" placeholder="Type a message…" autocomplete="off">
+        <button type="submit" class="coolms-lc__send" data-lc="send">Send</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+(function(){
+  if (window.__coolmsDynamicChatInit) return;
+  window.__coolmsDynamicChatInit = true;
+
+  var root = document.getElementById('coolms-lc');
+  if (!root) return;
+
+  var API = '/api/v1/dynamic-chat';
+  var SS_KEY = 'coolms_dynamic_chat';
+  var POLL_MS = 4000;
+  var REALTIME_SAFETY_MS = 30000; // slow catch-up poll once the realtime sub is live
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  var q = function(sel){ return root.querySelector('[data-lc="' + sel + '"]'); };
+  var session = null;     // { token, conversationId, visitorParticipantId }
+  var lastSeq = 0;
+  var pollTimer = null;
+  var rt = null;          // Centrifuge client (lazy; null until a sub is attempted)
+  var rtSub = null;       // the chat.room.{id} subscription
+  var sdkPromise = null;  // memoised /vendor/centrifuge.js loader
+  var seen = {};          // message id -> true (dedupe across optimistic + polled)
+  var config = null;      // resolved pre-chat config (see /dynamic-chat/config)
+  var configReady = false;
+  var countryMap = {};    // iso -> { dial, example, tmpl }
+  var phoneTmpl = '';     // active country's mask template, e.g. "### ### ## ##"
+  var pending = [];       // staged attachment descriptors awaiting the next send
+  var uploading = 0;      // in-flight attachment uploads
+  var objectUrls = [];    // blob: URLs minted for image thumbnails (revoked on unload)
+
+  // Fallback used if /config can't be fetched — keeps the widget usable
+  // (name + email + message, no phone), and "either" makes email effectively
+  // required when phone is off.
+  var FALLBACK_CONFIG = {
+    fields: {
+      name: { enabled: true, required: true },
+      email: { enabled: true, required: false },
+      phone: { enabled: false, required: false },
+      message: { enabled: true, required: true }
+    },
+    requireContact: 'either',
+    countries: [],
+    defaultCountry: null
+  };
+
+  function loadSession(){
+    try {
+      var raw = sessionStorage.getItem(SS_KEY);
+      if (raw){ var s = JSON.parse(raw); if (s && s.token && s.conversationId){ return s; } }
+    } catch (e) {}
+    return null;
+  }
+  function saveSession(s){ try { sessionStorage.setItem(SS_KEY, JSON.stringify(s)); } catch (e) {} }
+
+  function esc(str){
+    return String(str == null ? '' : str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ---- config-driven pre-chat form -------------------------------------
+
+  function fEnabled(key){ return !!(config && config.fields && config.fields[key] && config.fields[key].enabled); }
+  function fRequired(key){ return !!(config && config.fields && config.fields[key] && config.fields[key].required); }
+
+  function pageLocale(){
+    return (document.documentElement.getAttribute('lang') || navigator.language || 'en');
+  }
+  function regionName(iso){
+    try {
+      var dn = new Intl.DisplayNames([pageLocale()], { type: 'region' });
+      return dn.of(iso) || iso;
+    } catch (e) { return iso; }
+  }
+
+  // "044 668 18 00" -> "### ### ## ##"
+  function maskTemplate(example){
+    return example ? String(example).replace(/[0-9]/g, '#') : '';
+  }
+  // Format raw input to the active country's template; no template = keep digits/+.
+  function applyMask(raw, tmpl){
+    if (!tmpl) return String(raw).replace(/[^\d+]/g, '');
+    var digits = String(raw).replace(/\D/g, '');
+    var out = '', di = 0;
+    for (var i = 0; i < tmpl.length && di < digits.length; i++){
+      if (tmpl.charAt(i) === '#'){ out += digits.charAt(di++); }
+      else { out += tmpl.charAt(i); }
+    }
+    return out;
+  }
+
+  function setCountry(iso){
+    var meta = countryMap[iso];
+    phoneTmpl = (meta && meta.tmpl) || '';
+    var phone = q('f-phone');
+    if (phone){
+      phone.placeholder = phoneTmpl || ((meta && meta.dial) ? meta.dial + ' …' : 'Phone');
+      phone.value = applyMask(phone.value, phoneTmpl);
+    }
+  }
+
+  function populateCountries(countries, defaultCountry){
+    var select = q('country');
+    if (!select) return;
+    countryMap = {};
+    var rows = [];
+    (countries || []).forEach(function(c){
+      if (!c || !c.iso) return;
+      countryMap[c.iso] = { dial: c.dial, example: c.example, tmpl: maskTemplate(c.example) };
+      rows.push({ iso: c.iso, label: regionName(c.iso) + ' (' + (c.dial || '') + ')' });
+    });
+    rows.sort(function(a, b){ return a.label.localeCompare(b.label); });
+    select.innerHTML = '';
+    rows.forEach(function(r){
+      var opt = document.createElement('option');
+      opt.value = r.iso;
+      opt.textContent = r.label;
+      select.appendChild(opt);
+    });
+    var initial = (defaultCountry && countryMap[defaultCountry]) ? defaultCountry : (rows[0] && rows[0].iso);
+    if (initial){ select.value = initial; setCountry(initial); }
+  }
+
+  function applyConfig(cfg){
+    config = cfg;
+    if (cfg && cfg.items && cfg.items.length){ renderFields(cfg.items); }
+    else { useFallbackFields(); }
+
+    var group = q('phone-group');
+    if (fEnabled('phone') && group){
+      populateCountries(cfg.countries, cfg.defaultCountry);
+      group.removeAttribute('hidden');
+    } else if (group){
+      group.setAttribute('hidden', '');
+    }
+  }
+
+  // Draw the fields the server declared, in its order. Every field keeps its
+  // `data-lc="f-<name>"` hook, so the submit path reads them exactly as before.
+  function renderFields(items){
+    var host = q('fields');
+    if (!host) return;
+    host.innerHTML = '';
+    for (var i = 0; i < items.length; i++){ host.appendChild(buildField(items[i])); }
+  }
+
+  function buildField(item){
+    var required = !!item.required;
+    // The definition says which fields are required and the admin preview shows
+    // it; the widget accepted the flag and drew nothing, so a visitor learned
+    // that Name is mandatory by submitting without one. A placeholder-driven
+    // form has no label to hang a marker on, so the marker goes in the
+    // placeholder -- and `aria-required` says the same thing to a screen reader,
+    // which cannot see an asterisk.
+    var ph = (item.placeholder || item.label || '') + (required ? ' *' : '');
+
+    if (item.type === 'intl_phone'){
+      // ONE field, two inputs: the dial code and the national number are a
+      // single value, validated and stored together.
+      var group = document.createElement('div');
+      group.className = 'coolms-lc__phone';
+      group.setAttribute('data-lc', 'phone-group');
+      var select = document.createElement('select');
+      select.className = 'coolms-lc__country';
+      select.setAttribute('data-lc', 'country');
+      select.setAttribute('aria-label', item.label || 'Country');
+      var tel = input('tel', 'f-' + item.name, ph, required);
+      tel.setAttribute('inputmode', 'tel');
+      tel.setAttribute('autocomplete', 'tel');
+      group.appendChild(select);
+      group.appendChild(tel);
+      return group;
+    }
+
+    if (item.type === 'textarea' || item.type === 'custom_textarea'){
+      var area = document.createElement('textarea');
+      area.className = 'coolms-lc__input coolms-lc__textarea';
+      area.setAttribute('data-lc', 'f-' + item.name);
+      area.setAttribute('rows', '3');
+      area.setAttribute('placeholder', ph);
+      if (required){ area.setAttribute('required', ''); area.setAttribute('aria-required', 'true'); }
+      return area;
+    }
+
+    // Everything else is a single-line input; an unknown type degrades to text
+    // rather than disappearing, because a field the server asked for going
+    // missing is worse than one rendered plainly.
+    var kind = item.type === 'email' ? 'email' : (item.type === 'tel' ? 'tel' : 'text');
+    var el = input(kind, 'f-' + item.name, ph, required);
+    if (kind === 'email') el.setAttribute('autocomplete', 'email');
+    if (item.name === 'name') el.setAttribute('autocomplete', 'name');
+    return el;
+  }
+
+  function input(type, hook, placeholder, required){
+    var el = document.createElement('input');
+    el.className = 'coolms-lc__input';
+    el.setAttribute('data-lc', hook);
+    el.type = type;
+    el.setAttribute('placeholder', placeholder);
+    if (required){ el.setAttribute('required', ''); el.setAttribute('aria-required', 'true'); }
+    return el;
+  }
+
+  /** Older server, no `items`: keep the shipped layout rather than no form. */
+  function useFallbackFields(){
+    var host = q('fields');
+    var tpl = q('fallback-fields');
+    if (!host || !tpl || host.children.length) return;
+    host.appendChild(tpl.content.cloneNode(true));
+    toggleField('f-email', fEnabled('email'));
+    toggleField('f-message', fEnabled('message'));
+  }
+  function toggleField(sel, enabled){
+    var el = q(sel);
+    if (!el) return;
+    if (enabled){ el.removeAttribute('hidden'); }
+    else { el.setAttribute('hidden', ''); el.value = ''; }
+  }
+
+  function ensureConfig(cb){
+    if (configReady){ cb(); return; }
+    fetch(API + '/config', { headers: { 'Accept': 'application/json' } })
+      .then(function(r){ return r.ok ? r.json() : FALLBACK_CONFIG; })
+      .then(function(cfg){ applyConfig(cfg || FALLBACK_CONFIG); })
+      .catch(function(){ applyConfig(FALLBACK_CONFIG); })
+      .then(function(){ configReady = true; q('prechat').removeAttribute('hidden'); cb(); });
+  }
+
+  function validate(name, email, phone, message){
+    if (!name) return 'Please enter your name.';
+    if (fRequired('email') && !email) return 'Please enter your email address.';
+    if (email && !EMAIL_RE.test(email)) return 'Please enter a valid email address.';
+    if (fRequired('phone') && !phone) return 'Please enter your phone number.';
+    if (config.requireContact === 'either' && (fEnabled('email') || fEnabled('phone')) && !email && !phone){
+      return 'Please provide an email address or a phone number.';
+    }
+    if (fRequired('message') && !message) return 'Please enter a message.';
+    return null;
+  }
+
+  // ---- thread / messaging (unchanged transport) ------------------------
+
+  function renderMessage(m){
+    if (!m || !m.id || seen[m.id]) return;
+    seen[m.id] = true;
+    if (typeof m.seq === 'number' && m.seq > lastSeq) lastSeq = m.seq;
+    var mine = session && m.senderParticipantId === session.visitorParticipantId;
+    var kind = m.type === 'text' ? (mine ? 'me' : 'them') : 'sys';
+    var div = document.createElement('div');
+    div.className = 'coolms-lc__msg coolms-lc__msg--' + kind;
+    var text = m.body || '';
+    if (text){
+      var span = document.createElement('span');
+      span.className = 'coolms-lc__txt';
+      span.textContent = text;          // textContent => no HTML injection
+      div.appendChild(span);
+    }
+    var atts = m.attachments || [];
+    if (atts.length){ renderAttachments(div, atts, mine); }
+    q('msgs').appendChild(div);
+    var body = q('body');
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function fmtSize(bytes){
+    bytes = +bytes || 0;
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  // Render a message's attachments under its bubble. Images become thumbnails
+  // (fetched as blobs since an <img src> can't carry the X-DynamicChat-Token);
+  // everything else is a download chip. All labels via textContent (escaped).
+  function renderAttachments(container, atts, mine){
+    var wrap = document.createElement('div');
+    wrap.className = 'coolms-lc__atts';
+    atts.forEach(function(a){
+      if (!a || !a.vfsNodeId) return;
+      if (a.kind === 'image'){
+        var img = document.createElement('img');
+        img.className = 'coolms-lc__thumb';
+        img.alt = a.filename || 'image';
+        img.title = a.filename || '';
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function(){ downloadAttachment(a); });
+        wrap.appendChild(img);
+        hydrateImage(img, a.vfsNodeId);
+      } else {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'coolms-lc__file' + (mine ? ' coolms-lc__file--me' : '');
+        chip.textContent = '📎 ' + (a.filename || 'file') + (a.sizeBytes ? ' (' + fmtSize(a.sizeBytes) + ')' : '');
+        chip.addEventListener('click', function(){ downloadAttachment(a); });
+        wrap.appendChild(chip);
+      }
+    });
+    container.appendChild(wrap);
+  }
+
+  function attachmentUrl(nodeId){ return API + '/attachments/' + encodeURIComponent(nodeId); }
+
+  function hydrateImage(img, nodeId){
+    if (!session) return;
+    fetch(attachmentUrl(nodeId), { headers: authHeaders() })
+      .then(function(r){ return r.ok ? r.blob() : null; })
+      .then(function(blob){ if (!blob) return; var u = URL.createObjectURL(blob); objectUrls.push(u); img.src = u; })
+      .catch(function(){});
+  }
+
+  function downloadAttachment(a){
+    if (!session || !a || !a.vfsNodeId) return;
+    fetch(attachmentUrl(a.vfsNodeId), { headers: authHeaders() })
+      .then(function(r){ return r.ok ? r.blob() : null; })
+      .then(function(blob){
+        if (!blob) return;
+        var u = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = u;
+        link.download = a.filename || 'attachment';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function(){ URL.revokeObjectURL(u); }, 4000);
+      })
+      .catch(function(){});
+  }
+
+  function showThread(){
+    q('prechat').setAttribute('hidden','');
+    q('body').removeAttribute('hidden');
+    q('composer').removeAttribute('hidden');
+    updateSendState();
+  }
+
+  function authHeaders(extra){
+    var h = { 'Accept': 'application/json', 'X-DynamicChat-Token': session.token };
+    if (extra) for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  function loadHistory(){
+    fetch(API + '/messages?afterSeq=0&limit=200', { headers: authHeaders() })
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(list){ (list || []).forEach(renderMessage); beginUpdates(); })
+      .catch(function(){ beginUpdates(); });
+  }
+
+  function poll(){
+    if (!session) return;
+    fetch(API + '/messages?afterSeq=' + lastSeq + '&limit=100', { headers: authHeaders() })
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(list){ (list || []).forEach(renderMessage); })
+      .catch(function(){});
+  }
+  function startPolling(){ if (!pollTimer) pollTimer = setInterval(poll, POLL_MS); }
+
+  // ---- live updates (Centrifugo, poll fallback) ------------------------
+  // The poll above is the always-on baseline. Once a live chat.room.{id}
+  // subscription is up, the agent's replies arrive instantly (a body-less
+  // nudge -> we pull by cursor) and the poll backs off to a slow safety net.
+  // ANY realtime failure (SDK blocked, token error, WS down) silently leaves
+  // the fast poll running, so the widget never depends on realtime working.
+
+  function beginUpdates(){ startPolling(); startRealtime(); }
+
+  function slowPolling(){
+    if (pollTimer){ clearInterval(pollTimer); }
+    pollTimer = setInterval(poll, REALTIME_SAFETY_MS);
+  }
+
+  // Lazy-load the Centrifuge SDK only once a chat is actually live, so visitors
+  // who never open the widget don't pay for it. Resolves false if it can't load.
+  function loadSdk(){
+    if (typeof window.Centrifuge !== 'undefined') return Promise.resolve(true);
+    if (sdkPromise) return sdkPromise;
+    sdkPromise = new Promise(function(resolve){
+      var s = document.createElement('script');
+      s.src = '/vendor/centrifuge.js';
+      s.async = true;
+      s.onload = function(){ resolve(typeof window.Centrifuge !== 'undefined'); };
+      s.onerror = function(){ resolve(false); };
+      document.head.appendChild(s);
+    });
+    return sdkPromise;
+  }
+
+  function fetchRealtimeToken(){
+    return fetch(API + '/realtime-token', { method: 'POST', headers: authHeaders() })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .catch(function(){ return null; });
+  }
+
+  function startRealtime(){
+    if (!session || rt) return;
+    loadSdk().then(function(ok){
+      if (!ok || !session || rt) return;
+      fetchRealtimeToken().then(function(info){
+        if (!info || !info.wsUrl || !info.token || !info.channel || !session || rt) return;
+        var c;
+        try {
+          c = new window.Centrifuge(info.wsUrl, {
+            token: info.token,
+            getToken: function(){
+              return fetchRealtimeToken().then(function(i){
+                if (i && i.token) return i.token;
+                throw new Error('coolms_dynamic_chat_token');
+              });
+            }
+          });
+        } catch (e){ return; } // construction failed -> fast poll keeps running
+        rt = c;
+        c.on('connected', function(){ slowPolling(); poll(); }); // catch up on connect
+        rtSub = c.newSubscription(info.channel);
+        rtSub.on('publication', function(){ poll(); });           // nudge -> pull by cursor
+        try { rtSub.subscribe(); c.connect(); } catch (e){}
+      });
+    });
+  }
+
+  function start(ev){
+    ev.preventDefault();
+    var errEl = q('prechat-err');
+    errEl.setAttribute('hidden','');
+
+    var name = q('f-name').value.trim();
+    var email = fEnabled('email') ? q('f-email').value.trim() : '';
+    var message = fEnabled('message') ? q('f-message').value.trim() : '';
+    var phone = fEnabled('phone') ? q('f-phone').value.trim() : '';
+    var country = fEnabled('phone') ? (q('country').value || '') : '';
+
+    var err = validate(name, email, phone, message);
+    if (err){ errEl.textContent = err; errEl.removeAttribute('hidden'); return; }
+
+    var btn = q('start');
+    btn.disabled = true;
+    var payload = { name: name, email: email, message: message };
+    if (phone){ payload.phone = phone; payload.phoneCountry = country; }
+
+    fetch(API + '/sessions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function(r){ if (!r.ok) throw new Error('start_failed'); return r.json(); })
+      .then(function(s){
+        session = { token: s.visitorToken, conversationId: s.conversationId, visitorParticipantId: s.visitorParticipantId };
+        saveSession(session);
+        showThread();
+        loadHistory();
+      })
+      .catch(function(){
+        btn.disabled = false;
+        errEl.textContent = 'Sorry, we could not start the chat. Please try again.';
+        errEl.removeAttribute('hidden');
+      });
+  }
+
+  function uuid(){
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return 'cid-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
+  }
+
+  // ---- attachments (upload + staged chips) -----------------------------
+
+  function composerError(msg){
+    var e = q('composer-err');
+    if (!e) return;
+    e.textContent = msg;
+    e.removeAttribute('hidden');
+    setTimeout(function(){ if (e) e.setAttribute('hidden', ''); }, 4000);
+  }
+
+  function updateSendState(){
+    var sendBtn = q('send');
+    var input = q('text');
+    if (!sendBtn || !input) return;
+    sendBtn.disabled = uploading > 0 || (input.value.trim() === '' && pending.length === 0);
+  }
+
+  function renderPending(){
+    var box = q('pending');
+    if (!box) return;
+    box.innerHTML = '';
+    pending.forEach(function(a, idx){
+      var chip = document.createElement('span');
+      chip.className = 'coolms-lc__chip';
+      var label = document.createElement('span');
+      label.textContent = '📎 ' + (a.filename || 'file');   // escaped
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'coolms-lc__chipx';
+      x.setAttribute('data-idx', String(idx));
+      x.setAttribute('aria-label', 'Remove attachment');
+      x.textContent = '×';
+      chip.appendChild(label);
+      chip.appendChild(x);
+      box.appendChild(chip);
+    });
+    if (uploading > 0){
+      var up = document.createElement('span');
+      up.className = 'coolms-lc__chip coolms-lc__chip--up';
+      up.textContent = 'Uploading…';
+      box.appendChild(up);
+    }
+    if (pending.length || uploading > 0){ box.removeAttribute('hidden'); }
+    else { box.setAttribute('hidden', ''); }
+    updateSendState();
+  }
+
+  function uploadFile(file){
+    if (!session || !file) return;
+    uploading++;
+    renderPending();
+    var fd = new FormData();
+    fd.append('file', file);
+    fetch(API + '/attachments', { method: 'POST', headers: authHeaders(), body: fd })
+      .then(function(r){
+        if (r.ok) return r.json();
+        return r.json().then(function(e){ throw e; }, function(){ throw { detail: 'Upload failed.' }; });
+      })
+      .then(function(desc){ if (desc && desc.vfsNodeId) pending.push(desc); })
+      .catch(function(e){ composerError((e && (e.detail || e.title)) || 'Could not attach that file.'); })
+      .then(function(){ uploading--; renderPending(); });
+  }
+
+  function onFiles(ev){
+    var files = ev.target.files;
+    if (files){ for (var i = 0; i < files.length; i++){ uploadFile(files[i]); } }
+    ev.target.value = '';   // allow re-picking the same file
+  }
+
+  function removePending(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('.coolms-lc__chipx') : null;
+    if (!btn) return;
+    var idx = parseInt(btn.getAttribute('data-idx'), 10);
+    if (!isNaN(idx)){ pending.splice(idx, 1); renderPending(); }
+  }
+
+  function send(ev){
+    ev.preventDefault();
+    if (!session || uploading > 0) return;
+    var input = q('text');
+    var body = input.value.trim();
+    var atts = pending.slice();
+    if (!body && atts.length === 0) return;
+    var clientId = uuid();
+    input.value = '';
+    pending = [];
+    renderPending();
+    var sendBtn = q('send');
+    sendBtn.disabled = true;
+    fetch(API + '/messages', {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ body: body, clientId: clientId, attachments: atts })
+    })
+      .then(function(r){ if (!r.ok) throw new Error('send_failed'); return r.json(); })
+      .then(function(m){ renderMessage(m); })
+      .catch(function(){ input.value = body; pending = atts; renderPending(); })
+      .then(function(){ updateSendState(); input.focus(); });
+  }
+
+  function openPanel(){
+    root.setAttribute('data-open','1');
+    if (session){ var t = q('text'); if (t) t.focus(); return; }
+    ensureConfig(function(){ var n = q('f-name'); if (n) n.focus(); });
+  }
+  function closePanel(){ root.setAttribute('data-open','0'); }
+
+  // One missing element must not decapitate the rest of the bindings: these run
+  // as a block, so a `null.addEventListener` used to throw and silently leave
+  // every listener BELOW it unbound.
+  function on(sel, type, fn){
+    var el = q(sel);
+    if (el) el.addEventListener(type, fn);
+  }
+
+  root.querySelector('[data-lc="open"]').addEventListener('click', openPanel);
+  root.querySelector('[data-lc="close"]').addEventListener('click', closePanel);
+  on('prechat', 'submit', start);
+  on('composer', 'submit', send);
+
+  // The pre-chat fields are RENDERED from the server's descriptor, so the
+  // country select and the phone input are replaced after boot. Binding to them
+  // directly leaves the listener attached to an element that is no longer in the
+  // document -- which is exactly how the phone mask stopped following the
+  // country. Delegated from the form, which does survive a re-render.
+  on('prechat', 'change', function(e){
+    var t = e.target;
+    if (t && t.matches && t.matches('[data-lc="country"]')) setCountry(t.value);
+  });
+  on('prechat', 'input', function(e){
+    var t = e.target;
+    if (t && t.matches && t.matches('[data-lc="f-phone"]')) t.value = applyMask(t.value, phoneTmpl);
+  });
+
+  on('attach', 'click', function(){ var f = q('file'); if (f) f.click(); });
+  on('file', 'change', onFiles);
+  on('text', 'input', updateSendState);
+  on('pending', 'click', removePending);
+  window.addEventListener('beforeunload', function(){
+    objectUrls.forEach(function(u){ try { URL.revokeObjectURL(u); } catch (e) {} });
+    if (rt){ try { rt.disconnect(); } catch (e) {} }
+  });
+
+  // Resume an in-progress conversation across page navigations (same tab).
+  session = loadSession();
+  if (session){ showThread(); loadHistory(); updateSendState(); }
+})();
+</script>{endverbatim}

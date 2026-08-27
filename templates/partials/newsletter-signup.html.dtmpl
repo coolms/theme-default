@@ -1,0 +1,62 @@
+<div class="newsletter-signup">
+  <h2 class="h5 mb-2">Subscribe to our newsletter</h2>
+  <p class="text-muted small mb-3">Get occasional updates. No spam, unsubscribe any time.</p>
+  <form class="newsletter-form row g-2 justify-content-center" data-coolms-newsletter data-success="Almost there — check your inbox to confirm your subscription." novalidate>
+    <div class="col-sm-7 col-md-5">
+      <label class="visually-hidden" for="newsletter-email">Email address</label>
+      <input class="form-control" id="newsletter-email" name="email" type="email" maxlength="255" autocomplete="email" placeholder="you@example.com" required>
+    </div>
+    <div class="newsletter-form__hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+      <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+    </div>
+    <div class="col-sm-auto">
+      <button class="btn btn-primary w-100" type="submit">Subscribe</button>
+    </div>
+    <div class="col-12">
+      <p class="newsletter-form__status small mb-0 mt-2" role="status" hidden></p>
+    </div>
+  </form>
+</div>
+{verbatim}
+<script>
+(function () {
+  if (window.__coolmsNewsletterBound) { return; }
+  window.__coolmsNewsletterBound = true;
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || !form.matches || !form.matches('[data-coolms-newsletter]')) { return; }
+    e.preventDefault();
+    var status = form.querySelector('.newsletter-form__status');
+    var button = form.querySelector('button[type=submit]');
+    var fd = new FormData(form);
+    var show = function (msg, ok) {
+      if (!status) { return; }
+      status.hidden = false;
+      status.textContent = msg;
+      status.className = 'newsletter-form__status small mb-0 mt-2 ' + (ok ? 'text-success' : 'text-danger');
+    };
+    var email = (fd.get('email') == null ? '' : String(fd.get('email'))).trim();
+    if (!email) { show('Please enter your email address.', false); return; }
+    if (button) { button.disabled = true; }
+    fetch('/api/v1/newsletter/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/ld+json', 'Accept': 'application/ld+json' },
+      body: JSON.stringify({ email: email, website: fd.get('website') || '' })
+    }).then(function (res) {
+      if (button) { button.disabled = false; }
+      if (res.ok) {
+        form.reset();
+        show(form.getAttribute('data-success') || 'Almost there — check your inbox to confirm.', true);
+      } else if (res.status === 429) {
+        show('You are signing up too fast. Please try again in a few minutes.', false);
+      } else {
+        show('Sorry, we could not sign you up. Please check your email and try again.', false);
+      }
+    }).catch(function () {
+      if (button) { button.disabled = false; }
+      show('Sorry, we could not sign you up right now.', false);
+    });
+  });
+})();
+</script>
+{endverbatim}

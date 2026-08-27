@@ -1,0 +1,14 @@
+<section class="block block-embed py-5">
+  <div class="container">
+    {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+    {if:block.url}
+      <div class="ratio ratio-16x9 mx-auto" style="max-width: 820px">
+        <iframe src="{var:block.url escape}" title="{var:block.title escape}" loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+      </div>
+    {endif}
+    {if:block.caption}<p class="text-center text-muted mt-2">{var:block.caption escape}</p>{endif}
+  </div>
+</section>

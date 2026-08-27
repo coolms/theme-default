@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{var:content.locale default=`en`}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {include:`partials/seo-head.html.dtmpl`}
+    {slot:head}
+    {loop:site.theme.css}
+        <link rel="stylesheet" href="{var:item.url}">
+    {endloop}
+</head>
+<body>
+    {slot:body}
+        {include:`partials/header.html.dtmpl`}
+        <main class="container py-4" style="{var:page.contentMaxWidthStyle}">
+            {slot:content}{endslot}
+        </main>
+        {include:`partials/footer.html.dtmpl`}
+    {endslot}
+    {loop:site.theme.js}
+        <script src="{var:item.url}" type="module"></script>
+    {endloop}
+    {slot:scripts}
+    {include:`partials/cookie-consent.html.dtmpl`}
+    {include:`partials/analytics.html.dtmpl`}
+    {include:`partials/experiments.html.dtmpl`}
+    {include:`partials/personalization.html.dtmpl`}
+    {include:`partials/dynamic-chat-widget.html.dtmpl`}
+</body>
+</html>

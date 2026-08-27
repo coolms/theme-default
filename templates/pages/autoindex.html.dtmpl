@@ -1,0 +1,6 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <h1>{var:page.title}</h1>
+    {widget:vfs type=`any` order=`name` limit=`100`}
+  {endfill}
+{endinclude}

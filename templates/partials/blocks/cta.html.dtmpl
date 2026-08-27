@@ -1,0 +1,5 @@
+<section class="block block-cta py-5 my-4 text-center rounded-3 text-bg-dark">
+  <h2 class="mb-3">{var:block.title escape}</h2>
+  {if:block.text}<p class="lead col-lg-8 mx-auto">{var:block.text escape}</p>{endif}
+  {if:block.ctaUrl}<a class="btn btn-light btn-lg" href="{var:block.ctaUrl escape}">{var:block.ctaLabel escape}</a>{endif}
+</section>

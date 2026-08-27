@@ -1,0 +1,7 @@
+{if:i18n.locales}
+<div class="d-flex gap-1 me-2 align-items-center" role="group" aria-label="Language">
+  {loop:i18n.locales}
+  <a href="{var:item.href}" class="{var:item.linkClass}" hreflang="{var:item.code}" aria-current="{var:item.ariaCurrent}">{var:item.label}</a>
+  {endloop}
+</div>
+{endif}

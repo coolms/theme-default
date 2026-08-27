@@ -1,0 +1,83 @@
+<section class="block block-lead-form py-5">
+  <div class="col-lg-8 mx-auto">
+    <h2 class="mb-3">{if:block.heading}{var:block.heading escape}{else}Get in touch{endif}</h2>
+    {if:block.intro}<p class="lead mb-4">{var:block.intro escape}</p>{endif}
+    <form class="lead-form" data-coolms-lead data-form-id="{if:block.formId}{var:block.formId escape}{else}contact{endif}" data-success="{if:block.success}{var:block.success escape}{else}Thanks! We have received your message and will be in touch.{endif}" novalidate>
+      <div class="mb-3">
+        <label class="form-label w-100">Name
+          <input class="form-control" name="name" type="text" maxlength="120" autocomplete="name" required>
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label w-100">Email
+          <input class="form-control" name="email" type="email" maxlength="255" autocomplete="email" required>
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label w-100">Message
+          <textarea class="form-control" name="message" rows="5" maxlength="8000" required></textarea>
+        </label>
+      </div>
+      <div class="lead-form__hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+        <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <button class="btn btn-primary" type="submit">{if:block.button}{var:block.button escape}{else}Send message{endif}</button>
+      <p class="lead-form__status mt-3 mb-0" role="status" hidden></p>
+      <noscript><p class="text-muted small mt-2">JavaScript is required to send this form.</p></noscript>
+    </form>
+  </div>
+</section>
+{verbatim}
+<script>
+(function () {
+  if (window.__coolmsLeadBound) { return; }
+  window.__coolmsLeadBound = true;
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || !form.matches || !form.matches('[data-coolms-lead]')) { return; }
+    e.preventDefault();
+    var status = form.querySelector('.lead-form__status');
+    var button = form.querySelector('button[type=submit]');
+    var fd = new FormData(form);
+    var show = function (msg, ok) {
+      if (!status) { return; }
+      status.hidden = false;
+      status.textContent = msg;
+      status.className = 'lead-form__status mt-3 mb-0 ' + (ok ? 'text-success' : 'text-danger');
+    };
+    var get = function (k) { var v = fd.get(k); return (v == null ? '' : String(v)).trim(); };
+    var payload = {
+      formId: form.getAttribute('data-form-id') || 'contact',
+      name: get('name'),
+      email: get('email'),
+      message: get('message'),
+      source: window.location.pathname,
+      website: fd.get('website') || ''
+    };
+    if (!payload.name || !payload.email || !payload.message) {
+      show('Please fill in your name, email and message.', false);
+      return;
+    }
+    if (button) { button.disabled = true; }
+    fetch('/api/v1/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/ld+json', 'Accept': 'application/ld+json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      if (button) { button.disabled = false; }
+      if (res.ok) {
+        form.reset();
+        show(form.getAttribute('data-success') || 'Thanks! Your message has been sent.', true);
+      } else if (res.status === 429) {
+        show('You are sending messages too fast. Please try again in a few minutes.', false);
+      } else {
+        show('Sorry, your message could not be sent. Please check your details and try again.', false);
+      }
+    }).catch(function () {
+      if (button) { button.disabled = false; }
+      show('Sorry, your message could not be sent.', false);
+    });
+  });
+})();
+</script>
+{endverbatim}

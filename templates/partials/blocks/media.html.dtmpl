@@ -1,0 +1,8 @@
+<section class="block block-media py-5 text-center">
+  <figure class="figure">
+    {if:block.href}<a href="{var:block.href escape}">{endif}
+    {if:block.src}<img class="figure-img img-fluid rounded" src="{var:block.src escape}" alt="{var:block.alt escape}">{endif}
+    {if:block.href}</a>{endif}
+    {if:block.caption}<figcaption class="figure-caption">{var:block.caption escape}</figcaption>{endif}
+  </figure>
+</section>

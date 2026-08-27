@@ -1,0 +1,13 @@
+/vendor/
+/composer.lock
+/node_modules/
+node_modules
+
+# `public/` is vite's outDir with emptyOutDir -- every byte in it is generated
+# by `npm run build`, and vite deletes the directory before writing. Tracking it
+# would be tracking a build.
+/public/
+
+/.phpunit.cache/
+/.phpunit.result.cache
+/.php-cs-fixer.cache

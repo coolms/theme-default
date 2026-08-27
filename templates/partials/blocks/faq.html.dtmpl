@@ -1,0 +1,11 @@
+<section class="block block-faq py-5">
+  {if:block.title}<h2 class="text-center mb-4">{var:block.title escape}</h2>{endif}
+  <div class="block-faq__list col-lg-8 mx-auto">
+    {loop:block.items:item}
+      <div class="block-faq__item mb-3 pb-3 border-bottom">
+        {if:item.question}<h3 class="h6 mb-1">{var:item.question escape}</h3>{endif}
+        {if:item.answer}<p class="text-muted mb-0">{var:item.answer escape}</p>{endif}
+      </div>
+    {endloop}
+  </div>
+</section>

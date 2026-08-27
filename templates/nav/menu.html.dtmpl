@@ -1,0 +1,83 @@
+{verbatim}<style>
+/* 3-level nav: L1 top item, L2 dropdown, L3 hover/focus flyout submenu.
+   On desktop (>=lg) the 3rd level opens to the side on hover or keyboard
+   focus; on the collapsed mobile navbar it renders inline (indented), so no
+   JS is required. */
+.dropdown-submenu{position:relative}
+.dropdown-submenu>.dropdown-menu{margin:0}
+@media (min-width:992px){
+  .dropdown-submenu>.dropdown-menu{position:absolute;top:0;left:100%;margin-top:-.5rem;display:none}
+  .dropdown-submenu:hover>.dropdown-menu,
+  .dropdown-submenu:focus-within>.dropdown-menu{display:block}
+  .dropdown-submenu>.dropdown-toggle::after{float:right;margin-top:.5em;border-top:.3em solid transparent;border-bottom:.3em solid transparent;border-left:.3em solid;border-right:0}
+}
+@media (max-width:991.98px){
+  .dropdown-submenu>.dropdown-menu{display:block;border:0;padding-left:1rem}
+}
+</style>{endverbatim}
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  {loop:nodes:node}
+    {def:hasChildren=node.children}
+    {if:hasChildren}
+      <li class="nav-item dropdown{if:node.isActive} active{endif}">
+        <a class="nav-link dropdown-toggle{if:node.isCurrentPage} active{endif}"
+           href="{var:node.href}"
+           data-bs-toggle="dropdown"
+           {if:node.isCurrentPage}aria-current="page"{endif}>
+          {var:node.label}
+        </a>
+        <ul class="dropdown-menu">
+          {loop:node.children:child}
+            {def:hasGrandchildren=child.children}
+            {if:hasGrandchildren}
+              <li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle{if:child.isCurrentPage} active{endif}"
+                   href="{var:child.href}"
+                   {if:child.target}target="{var:child.target}"{endif}
+                   {if:child.isExternal}rel="noopener noreferrer"{endif}
+                   {if:child.isCurrentPage}aria-current="page"{endif}>
+                  {var:child.label}
+                </a>
+                <ul class="dropdown-menu">
+                  {loop:child.children:grandchild}
+                    <li>
+                      <a class="dropdown-item{if:grandchild.isCurrentPage} active{endif}"
+                         href="{var:grandchild.href}"
+                         {if:grandchild.target}target="{var:grandchild.target}"{endif}
+                         {if:grandchild.isExternal}rel="noopener noreferrer"{endif}
+                         {if:grandchild.isCurrentPage}aria-current="page"{endif}>
+                        {var:grandchild.label}
+                      </a>
+                    </li>
+                  {endloop}
+                </ul>
+              </li>
+            {endif}
+            {unless:hasGrandchildren}
+              <li>
+                <a class="dropdown-item{if:child.isCurrentPage} active{endif}"
+                   href="{var:child.href}"
+                   {if:child.target}target="{var:child.target}"{endif}
+                   {if:child.isExternal}rel="noopener noreferrer"{endif}
+                   {if:child.isCurrentPage}aria-current="page"{endif}>
+                  {var:child.label}
+                </a>
+              </li>
+            {endunless}
+          {endloop}
+        </ul>
+      </li>
+    {endif}
+    {unless:hasChildren}
+      <li class="nav-item{if:node.isActive} active{endif}">
+        <a class="nav-link{if:node.isCurrentPage} active{endif}"
+           href="{var:node.href}"
+           {if:node.target}target="{var:node.target}"{endif}
+           {if:node.isExternal}rel="noopener noreferrer"{endif}
+           {if:node.isCurrentPage}aria-current="page"{endif}>
+          {var:node.label}
+        </a>
+      </li>
+    {endunless}
+  {endloop}
+</ul>

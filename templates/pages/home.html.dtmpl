@@ -1,0 +1,18 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <section class="py-5 text-center bg-primary text-white rounded-3 mb-4">
+      <div class="container">
+        <h1 class="display-5 fw-bold">{var:site.label}</h1>
+        <p class="lead">{var:page.meta.description}</p>
+        {if:routes.login}
+          <a href="{var:routes.login}" class="btn btn-light btn-lg mt-3">Get started</a>
+        {endif}
+      </div>
+    </section>
+    {if:content.body}
+      <div class="py-2">
+        {var:content.body raw}
+      </div>
+    {endif}
+  {endfill}
+{endinclude}

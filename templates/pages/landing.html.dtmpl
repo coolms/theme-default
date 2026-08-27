@@ -1,0 +1,21 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <div class="landing-page">
+      {loop:landing.blocks:block}
+        {if:block.type=`hero`}{include:`partials/blocks/hero.html.dtmpl`}{endif}
+        {if:block.type=`features`}{include:`partials/blocks/features.html.dtmpl`}{endif}
+        {if:block.type=`stats`}{include:`partials/blocks/stats.html.dtmpl`}{endif}
+        {if:block.type=`steps`}{include:`partials/blocks/steps.html.dtmpl`}{endif}
+        {if:block.type=`media`}{include:`partials/blocks/media.html.dtmpl`}{endif}
+        {if:block.type=`pricing`}{include:`partials/blocks/pricing.html.dtmpl`}{endif}
+        {if:block.type=`gallery`}{include:`partials/blocks/gallery.html.dtmpl`}{endif}
+        {if:block.type=`embed`}{include:`partials/blocks/embed.html.dtmpl`}{endif}
+        {if:block.type=`quote`}{include:`partials/blocks/quote.html.dtmpl`}{endif}
+        {if:block.type=`faq`}{include:`partials/blocks/faq.html.dtmpl`}{endif}
+        {if:block.type=`accordion`}{include:`partials/blocks/accordion.html.dtmpl`}{endif}
+        {if:block.type=`cta`}{include:`partials/blocks/cta.html.dtmpl`}{endif}
+        {if:block.type=`lead_form`}{include:`partials/blocks/lead_form.html.dtmpl`}{endif}
+      {endloop}
+    </div>
+  {endfill}
+{endinclude}
