@@ -55,6 +55,15 @@ jobs:
       # manifest, and only after validate has seen the real one -- lets the
       # resolve succeed. Without it the install fails and every step behind it
       # is SKIPPED, so a red check would say nothing about the package.
+      # coolms/theme-bootstrap is a repository on GitHub but is not on Packagist
+      # yet, and an unpublished peer 404s the whole install exactly as hard as a
+      # missing dependency. Point composer at the repository HERE only -- the
+      # published manifest must keep naming the package and nothing else, or a
+      # consumer inherits a VCS entry they never asked for. Once it is submitted
+      # to Packagist this line stops mattering.
+      - name: Resolve the peer that is not on Packagist yet
+        run: composer config repositories.theme-bootstrap vcs https://github.com/coolms/theme-bootstrap
+
       - name: Allow the untagged generation branch of siblings
         run: |
           composer config minimum-stability dev

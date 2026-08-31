@@ -22,6 +22,9 @@
         "symfony": {
             "id": "coolms/theme-default",
             "allow-contrib": false
+        },
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
         }
     }
 }
