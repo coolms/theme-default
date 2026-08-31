@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoolMS\ThemeDefault\DependencyInjection;
 
 use CoolMS\ThemeDefault\Asset\ViteThemeAssetsProvider;
-use CoolMS\ThemeDefault\EventSubscriber\ThemeDefaultLifecycleSubscriber;
 use CoolMS\ThemeDefault\Provider\ThemeDefaultProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -20,7 +19,6 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
  *       autoconfiguration with the 'coolms.theme_provider' tag, so no manual tagging
  *       is needed here — setAutoconfigured(true) is sufficient.
  *
- *   ThemeDefaultLifecycleSubscriber
  *     - Autoconfigured: FrameworkBundle registers EventSubscriberInterface for
  *       autoconfiguration with the 'kernel.event_subscriber' tag.
  *
@@ -35,11 +33,6 @@ final class ThemeDefaultExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $container->register(ThemeDefaultProvider::class)
-            ->setAutowired(true)
-            ->setAutoconfigured(true)
-            ->setPublic(false);
-
-        $container->register(ThemeDefaultLifecycleSubscriber::class)
             ->setAutowired(true)
             ->setAutoconfigured(true)
             ->setPublic(false);

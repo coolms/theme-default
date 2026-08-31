@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoolMS\ThemeDefault\Provider;
 
-use App\Theme\Domain\Provider\ThemeProviderInterface;
+use CoolMS\Core\Theme\ThemeProviderInterface;
 
 /**
  * Provides the `coolms-default` Bootstrap 5 + DTMPL theme to the CoolMS Theme module.
