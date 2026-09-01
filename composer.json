@@ -1,6 +1,6 @@
 {
     "name": "coolms/theme-default",
-    "description": "Default Bootstrap 5 + DTMPL SSR theme for CoolMS 2.0",
+    "description": "The default CoolMS theme: Bootstrap styling over server-rendered DTMPL templates",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [

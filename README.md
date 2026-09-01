@@ -4,7 +4,7 @@
 [![PHP](https://img.shields.io/badge/php-%E2%89%A5%208.5-777bb4)](https://www.php.net/releases/8.5/en.php)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**Default Bootstrap 5 + DTMPL SSR theme for CoolMS 2.0**
+**The default CoolMS theme: Bootstrap styling over server-rendered DTMPL templates**
 
 A theme is not a module. It owns no domain and no storage: it implements a small
 provider port, ships templates and assets, and wires them into the container.
