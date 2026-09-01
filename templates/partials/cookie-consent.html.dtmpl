@@ -77,8 +77,8 @@
     return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
   }
 
-  // The canonical grant check — mirrors the backend App\Core\...\RequestConsent
-  // (ADR-146). Reads the granular comma-list AND the legacy binary: a legacy
+  // The canonical grant check — mirrors the backend's ...\RequestConsent.
+  //Reads the granular comma-list AND the legacy binary: a legacy
   // `accepted` covers analytics + personalization (NOT marketing); `declined`/
   // absent grants only necessary. Shared by the analytics / experiments /
   // personalization gate partials via window.coolmsConsent.has().

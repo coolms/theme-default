@@ -14,7 +14,7 @@
     document.cookie = name + '=' + encodeURIComponent(value) + '; Max-Age=' + (60*60*24*365) + '; Path=/; SameSite=Lax';
   }
   function consented(){
-    // ADR-146 tiered consent — analytics category (exposure/conversion beacons).
+    // tiered consent — analytics category (exposure/conversion beacons).
     // Legacy `accepted` grants analytics; the granular form is a comma-list.
     var raw = String(getCookie(CONSENT_KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
     if (raw === 'accepted') return true;

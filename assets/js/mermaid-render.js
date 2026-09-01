@@ -1,7 +1,7 @@
 /**
- * Public-page Mermaid diagram rendering — Track B #7.
+ * Public-page Mermaid diagram rendering —.
  *
- * The editor stores a Mermaid diagram as a fenced code block (riding the #788
+ * The editor stores a Mermaid diagram as a fenced code block (riding the
  * code-block contract — no backend transform needed):
  *
  *     <pre><code class="language-mermaid">graph TD; A --&gt; B</code></pre>
@@ -31,7 +31,7 @@ async function renderMermaid() {
         code.setAttribute('data-mermaid-done', '');
         const pre = code.closest('pre');
         if (!pre) continue;
-        // textContent decodes the stored HTML entities (`--&gt;` → `-->`), so
+        // textContent decodes the stored HTML entities (`--&gt;` -> `-->`), so
         // Mermaid receives the raw diagram source.
         const source = code.textContent || '';
         try {

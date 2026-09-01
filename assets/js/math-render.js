@@ -1,5 +1,5 @@
 /**
- * Public-page math rendering (KaTeX) — Track B #7.
+ * Public-page math rendering (KaTeX) —.
  *
  * The server ({@link MathProcessor}) wraps `$…$`/`$$…$$` LaTeX into explicit
  * `<span class="katex-src" data-display="0|1">LATEX</span>` markers — code- and
