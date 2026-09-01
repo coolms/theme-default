@@ -29,7 +29,7 @@ main {
     border-radius: 0.75rem;
 }
 
-// ── Media gallery widget ({widget:media:<collection-uuid> type=grid|slider|list})
+// -- Media gallery widget ({widget:media:<collection-uuid> type=grid|slider|list})
 // The MediaWidgetRenderer emits the markup + a `--cols` custom property; the
 // theme owns the layout. Without these rules the items stack full-width.
 .media-gallery-grid {
@@ -95,7 +95,7 @@ main {
 .cms-media-align-left   { margin-inline-end: auto; }
 .cms-media-align-right  { margin-inline-start: auto; }
 
-// ── Editor code (Track B): inline `<code>` + fenced `<pre><code>` blocks.
+// -- Editor code: inline `<code>` + fenced `<pre><code>` blocks.
 // Bootstrap reboot gives these a monospace baseline; these rules give the
 // block the expected "code box" affordance (surface, padding, h-scroll) so a
 // pasted snippet reads as code, not body text.
@@ -122,7 +122,7 @@ pre {
     }
 }
 
-// ── Syntax-highlight token palette (atom-one-dark). highlight.js paints
+// -- Syntax-highlight token palette (atom-one-dark). highlight.js paints
 // `<span class="hljs-…">` tokens into `<pre><code>` at runtime (see
 // assets/js/code-highlight.js); these colours are the same set the admin
 // editor uses so authoring and published output match. Scoped under `pre code`
@@ -142,7 +142,7 @@ pre code {
     .hljs-link { text-decoration: underline; }
 }
 
-// ── Multi-language code tabs ({div.code-tabs} wrapping several `<pre>` variants).
+// -- Multi-language code tabs ({div.code-tabs} wrapping several `<pre>` variants).
 // Progressively enhanced by code-highlight.js into a tab strip; without JS the
 // `<pre>` panels stack and stay readable.
 .code-tabs {
@@ -177,7 +177,7 @@ pre code {
     }
 }
 
-// ── Mermaid diagrams (Track B #7). A `<pre><code class="language-mermaid">`
+// -- Mermaid diagrams. A `<pre><code class="language-mermaid">`
 // block is swapped client-side (assets/js/mermaid-render.js) for this wrapper
 // holding the rendered SVG. Centred, fluid, with a light surface so the
 // diagram reads on the page; the inline SVG scales to the column width.
@@ -191,7 +191,7 @@ pre code {
     }
 }
 
-// Heading anchors + table of contents (Track B #6). Every content h2/h3 is
+// Heading anchors + table of contents. Every content h2/h3 is
 // given a server-rendered slug id + an appended permalink anchor; the docs
 // template renders the TOC from `page.toc`. The anchor stays invisible until
 // its heading is hovered/focused, so deep-linking is available without clutter.
@@ -226,7 +226,7 @@ h4:hover .heading-anchor,
     margin-left: 1rem;
 }
 
-// ── Callouts / admonitions (Track B #5). `<div class="callout callout-note">`
+// -- Callouts / admonitions. `<div class="callout callout-note">`
 // boxes authored in the editor. A tinted surface + a coloured left rule per
 // kind (note = primary, warning = warning, tip = success) using Bootstrap 5.3
 // subtle-background tokens, with literal fallbacks for themes that don't define
@@ -282,7 +282,7 @@ h4:hover .heading-anchor,
 .callout-warning .callout__title { color: var(--bs-warning-text-emphasis, #664d03); }
 .callout-tip .callout__title { color: var(--bs-success-text-emphasis, #0a3622); }
 
-// Responsive video / iframe embed ({widget:embed:video|iframe …} →
+// Responsive video / iframe embed ({widget:embed:video|iframe …} ->
 // embed.html.dtmpl). Bootstrap's .ratio holds the aspect box; this only adds
 // spacing + rounding.
 .cms-embed {
@@ -295,7 +295,7 @@ h4:hover .heading-anchor,
     }
 }
 
-// Provider audio embed ({widget:embed:audio …} → embed_audio.html.dtmpl): a
+// Provider audio embed ({widget:embed:audio …} -> embed_audio.html.dtmpl): a
 // fixed-height player iframe (Spotify / SoundCloud), full width in the column.
 .cms-embed-audio {
     margin: 1.5rem 0;
@@ -307,7 +307,7 @@ h4:hover .heading-anchor,
     }
 }
 
-// Direct audio file ({widget:embed:audio …} of a media file →
+// Direct audio file ({widget:embed:audio …} of a media file ->
 // embed_audio_file.html.dtmpl).
 .cms-embed-audio-file {
     display: block;
@@ -315,7 +315,7 @@ h4:hover .heading-anchor,
     margin: 1.5rem 0;
 }
 
-// Content tables (Track B #2). Editor-authored + Markdown-imported tables
+// Content tables. Editor-authored + Markdown-imported tables
 // render as bordered, zebra-striped blocks; the wrapper scrolls horizontally
 // on narrow viewports so a wide table never breaks the layout. Cell alignment
 // rides Bootstrap `text-*` classes (set on td/th), already covered by reboot.

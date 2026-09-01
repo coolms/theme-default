@@ -41,7 +41,7 @@ bin/console coolms:theme:activate coolms-default
 - `CoolMS\Core\Theme\ThemeAssetsProviderInterface`
 - `CoolMS\Core\Theme\ThemeProviderInterface`
 
-Both live in `coolms/core` as of ADR-166. Before that they were application
+Both live in `coolms/core` as of. Before that they were application
 classes, which is what made a theme unpublishable.
 
 ## Branches

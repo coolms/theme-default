@@ -1,5 +1,5 @@
 /**
- * Public-page code highlighting + code-tabs enhancement (#788 Track B).
+ * Public-page code highlighting + code-tabs enhancement (.
  *
  * Highlighting is CLIENT-SIDE but lazy and self-hosted: highlight.js' common
  * bundle is dynamically imported (its own Vite chunk) only when the page
