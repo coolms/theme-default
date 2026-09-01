@@ -9,7 +9,7 @@
     return match ? decodeURIComponent(match.slice(name.length + 1)) : '';
   }
   function consented(){
-    // ADR-146 tiered consent — analytics category. Cookie is authoritative; the
+    // tiered consent — analytics category. Cookie is authoritative; the
     // data-consent attribute reflects an in-session choice. Legacy `accepted` grants
     // analytics; the granular form is a comma-list of categories.
     var raw = String(getCookie(KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();

@@ -3,7 +3,7 @@
  * language (`{var:…}`, `{if:…}`, `{widget:…}`, `{verbatim}…{endverbatim}`).
  *
  * MIRROR of the admin SPA copy at:
- *   packages/theme-admin/angular/src/app/coolms-editor/lib/extensions/code-block/dtmpl-highlight.ts
+ *   the editor's own dtmpl-highlight extension.ts
  * There is no shared npm workspace across the admin app and the themes, so this
  * self-contained `LanguageFn` is duplicated. Keep the two in sync.
  *

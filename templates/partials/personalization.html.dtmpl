@@ -10,7 +10,7 @@
     var m = document.cookie.split('; ').filter(function(c){ return c.indexOf(name + '=') === 0; })[0];
     return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
   }
-  // ADR-146 tiered consent — the distinct `personalization` category (the
+  // tiered consent — the distinct `personalization` category (the
   // me/segments endpoint enforces the same server-side). Legacy `accepted` grants
   // personalization; the granular form is a comma-list of categories.
   function consented(){
