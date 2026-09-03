@@ -1,6 +1,6 @@
 slug: coolms-default
 name: CoolMS Default Theme
-version: 1.0.0
+version: 2.0.0-alpha2
 author: CoolMS Team
 description: Default Bootstrap 5 + DTMPL SSR theme for CoolMS 2.0
 feStack: ssr
