@@ -142,6 +142,34 @@ pre code {
     .hljs-link { text-decoration: underline; }
 }
 
+// -- Server-emitted widget states.
+//
+// Both of these are written by PHP and, until now, styled by nothing — so a
+// broken link and a failed widget rendered as ordinary body text. The class was
+// present in the markup the whole time, which is why nothing caught it: the
+// producer worked and the page showed no difference.
+
+// `coolms.link.broken_strategy: 'warning'` (the shipped default) emits this
+// instead of a link. Unstyled it was indistinguishable from `'silent'`, so
+// choosing the visible strategy bought nothing but a hover title.
+.broken-link {
+    color: var(--bs-danger, #dc3545);
+    text-decoration: underline wavy;
+    text-underline-offset: 0.2em;
+    cursor: help;
+}
+
+// A document widget that could not render. The message text is legible either
+// way; what was missing is any signal that it IS an error rather than content.
+.cms-document-widget--error {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--bs-danger, #dc3545);
+    background: rgba(220, 53, 69, 0.06);
+    color: var(--bs-danger-text-emphasis, #58151c);
+    font-size: 0.9375rem;
+}
+
 // -- Multi-language code tabs ({div.code-tabs} wrapping several `<pre>` variants).
 // Progressively enhanced by code-highlight.js into a tab strip; without JS the
 // `<pre>` panels stack and stay readable.

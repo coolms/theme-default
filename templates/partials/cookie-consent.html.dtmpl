@@ -23,7 +23,10 @@
 </style>
 <div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite" hidden>
   <div class="cookie-consent__inner">
-    <p class="cookie-consent__text">We use cookies to make this site work and, with your consent, to improve it and tailor content. See our <a href="/privacy.html">privacy policy</a>.</p>
+    <!-- /privacy, not /privacy.html: the installer creates that node (see
+         WebDefaultNaviProvider), so this link resolves on a fresh install. The
+         old hard-coded .html target 404'd on every one of them. -->
+    <p class="cookie-consent__text">We use cookies to make this site work and, with your consent, to improve it and tailor content. See our <a href="/privacy">privacy policy</a>.</p>
     <div class="cookie-consent__actions">
       <button type="button" class="cookie-consent__btn cookie-consent__btn--decline" data-cc="decline">Decline all</button>
       <button type="button" class="cookie-consent__btn cookie-consent__btn--customize" data-cc="customize" aria-expanded="false" aria-controls="cookie-consent-panel">Customize</button>

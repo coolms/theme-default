@@ -1,0 +1,32 @@
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}
+    <div class="py-4">
+      <h1 class="h3 mb-4">Privacy</h1>
+      {if:content.body}
+        {var:content.body raw}
+      {else}
+        {comment}
+          THE STUB SAYS THERE IS NO POLICY RATHER THAN PRETENDING TO BE ONE.
+
+          A generated privacy policy is worse than none: it states commitments
+          nobody made, about processing nobody has described, and a reader has no
+          way to tell it from a real one. So this says the true thing and names
+          who has to fix it.
+
+          Same self-replacing shape as the front page: it lives in the `{else}`
+          branch, so writing the page removes it with nothing to switch off.
+        {endcomment}
+        <p class="lead">This site has not published a privacy policy yet.</p>
+        <p>
+          The page exists so the cookie notice has somewhere honest to point. It is
+          ordinary content — the operator of this site replaces it with their own
+          policy, which is not something software can write for them.
+        </p>
+        <p class="text-secondary small mb-0">
+          If you are that operator: this page is at <code>/privacy</code>, under
+          <strong>Content</strong> in the admin.
+        </p>
+      {endif}
+    </div>
+  {endfill}
+{endinclude}

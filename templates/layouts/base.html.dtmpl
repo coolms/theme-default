@@ -21,10 +21,24 @@
         <script src="{var:item.url}" type="module"></script>
     {endloop}
     {slot:scripts}
-    {include:`partials/cookie-consent.html.dtmpl`}
+    {comment}
+      Two widgets that make a PROMISE to a visitor, gated here rather than
+      inside their own files -- each of those is one {verbatim} block, where a
+      directive prints as text with no error. Defaults are off; see
+      Web\Infrastructure\Settings\PublicWidgetsSettingsContributor for why.
+
+      The analytics / experiments / personalization partials are NOT gated on
+      consent here: each reads the consent cookie and `data-consent` for itself,
+      so with no banner they see no consent and stay off on their own.
+    {endcomment}
+    {if:site.features.cookieConsent}
+      {include:`partials/cookie-consent.html.dtmpl`}
+    {endif}
     {include:`partials/analytics.html.dtmpl`}
     {include:`partials/experiments.html.dtmpl`}
     {include:`partials/personalization.html.dtmpl`}
-    {include:`partials/dynamic-chat-widget.html.dtmpl`}
+    {if:site.features.chat}
+      {include:`partials/dynamic-chat-widget.html.dtmpl`}
+    {endif}
 </body>
 </html>
