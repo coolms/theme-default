@@ -1,17 +1,67 @@
 {include:`layouts/default.html.dtmpl`}
   {fill:content}
-    <section class="py-5 text-center bg-primary text-white rounded-3 mb-4">
-      <div class="container">
-        <h1 class="display-5 fw-bold">{var:site.label}</h1>
-        <p class="lead">{var:page.meta.description}</p>
-        {if:routes.login}
-          <a href="{var:routes.login}" class="btn btn-light btn-lg mt-3">Get started</a>
-        {endif}
-      </div>
-    </section>
     {if:content.body}
+      {comment}
+        THE HERO IS INSIDE THE CONTENT BRANCH, and that is the fix for
+        `<h1>Default</h1>`. The site label is a LABEL -- an internal name for a
+        section, defaulting to the literal string "Default" -- and promoting it
+        into the first line of text on a site is how a fresh installation
+        introduced itself to a stranger. A site that has written a front page has
+        also chosen its label, so there the heading is theirs; a site that has
+        not gets the panel below instead of a heading nobody wrote.
+      {endcomment}
+      <section class="py-5 text-center bg-primary text-white rounded-3 mb-4">
+        <div class="container">
+          <h1 class="display-5 fw-bold">{var:site.label}</h1>
+          {comment}
+            GUARDED because an absent description printed an EMPTY <p class="lead">
+            -- a gap the height of a line, which reads as something that failed to
+            load rather than as something not yet written.
+          {endcomment}
+          {if:page.meta.description}
+            <p class="lead">{var:page.meta.description}</p>
+          {endif}
+          {if:routes.login}
+            <a href="{var:routes.login}" class="btn btn-light btn-lg mt-3">Get started</a>
+          {endif}
+        </div>
+      </section>
       <div class="py-2">
         {var:content.body raw}
+      </div>
+    {else}
+      {comment}
+        THE FIRST-RUN BLOCK. It answers the only two questions a person has in
+        the first two minutes -- did it work, and where do I go next -- and it is
+        deliberately the page's CONTENT slot rather than a banner bolted on top:
+        the moment anyone writes a front page, this disappears on its own.
+        Nothing to find, nothing to switch off, no setting to discover.
+
+        That is also why it is not styled like a designed page. A default that
+        looks like a design decision is one a new user starts trying to remove
+        instead of replace.
+      {endcomment}
+      <div class="py-5">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <p class="text-uppercase text-secondary small fw-semibold mb-2">Default page</p>
+            <h1 class="h4 mb-3">Your installation is working.</h1>
+            <p class="mb-4">
+              This is the page CoolMS serves before anyone has written one. It is
+              ordinary content — open it in the admin and replace it, and this text
+              is gone.
+            </p>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <a href="/admin" class="btn btn-primary">Open the admin</a>
+              <a href="https://github.com/coolms" class="btn btn-outline-secondary">Source and packages</a>
+            </div>
+            <p class="text-secondary small mb-0">
+              Signed in already? The front page lives under <strong>Content</strong>.
+              Everything else on this page — the header, the footer — comes from the
+              active theme.
+            </p>
+          </div>
+        </div>
       </div>
     {endif}
   {endfill}

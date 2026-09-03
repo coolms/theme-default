@@ -1,13 +1,21 @@
 /**
  * highlight.js language definition for DTMPL — the platform's PHP-only template
- * language (`{var:…}`, `{if:…}`, `{widget:…}`, `{verbatim}…{endverbatim}`).
+ * language (`{var:…}`, `{if:…}`, `{widget:…}`, `{verbatim}…{endverbatim}`,
+ * `{comment}…{endcomment}`).
  *
  * MIRROR of the admin SPA copy at:
- *   the editor's own dtmpl-highlight extension.ts
+ *   packages/editor-angular/src/lib/extensions/code-block/dtmpl-highlight.ts
  * There is no shared npm workspace across the admin app and the themes, so this
- * self-contained `LanguageFn` is duplicated. Keep the two in sync.
+ * self-contained `LanguageFn` is duplicated. Keep the two in sync — and the
+ * server-side `DtmplGrammar` in the platform's `Web` module with them.
  *
- * SOURCE OF TRUTH for the keyword set: src/DTMPL/Domain/Lexer/Lexer.php KEYWORDS.
+ * SOURCE OF TRUTH for the keyword set: `KeywordRegistry::KEYWORDS` in the
+ * `coolms/dtmpl` package (`packages/dtmpl/src/Lexer/KeywordRegistry.php`).
+ *
+ * ⚠️ `verbatim` and `comment` are NOT in that registry — they are lexer
+ * constructs resolved ahead of the parser, which is why their contents reach no
+ * output. Spelled out separately below; a sweep that diffs only against the
+ * registry will not see them.
  */
 
 export const DTMPL_KEYWORDS = [
@@ -39,6 +47,12 @@ export function dtmpl(_hljs) {
 
     const ALIAS = { scope: 'symbol', begin: /@[A-Za-z_]\w*/ };
 
+    // `{comment}…{endcomment}` and `{comment:…}` — body included, not just the
+    // markers: a comment's contents are definitionally not code. Exact-form
+    // begins, so `{comments}` and `{comment foo}` stay ordinary text.
+    const COMMENT_BLOCK = { scope: 'comment', begin: /\{comment\}/, end: /\{endcomment\}/ };
+    const COMMENT_INLINE = { scope: 'comment', begin: /\{comment:/, end: /\}/ };
+
     const OPERATOR = { scope: 'operator', begin: /!=|>=|<=|[=><:,.[\]]/ };
 
     const VARIABLE = {
@@ -61,6 +75,9 @@ export function dtmpl(_hljs) {
         case_insensitive: false,
         contains: [
             { match: /\{\{|\}\}/, scope: 'meta' },
+            // Comments first: their body must not be offered to TAG below.
+            COMMENT_BLOCK,
+            COMMENT_INLINE,
             { match: /\{(?:verbatim|endverbatim)\}/, scope: 'meta' },
             TAG,
         ],

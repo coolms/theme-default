@@ -1,8 +1,19 @@
 <footer class="bg-dark text-light py-4 mt-5">
   <div class="container">
-    <div class="text-center mb-4">
-      {include:`partials/newsletter-signup.html.dtmpl`}
-    </div>
+    {comment}
+      A signup form with no list behind it collects an address and does nothing
+      with it -- a broken promise, and a data-protection question rather than a
+      rough edge. Off until the Newsletter module is configured; see
+      Web\Infrastructure\Settings\PublicWidgetsSettingsContributor.
+
+      The guard is HERE rather than inside the partial because that file is one
+      {verbatim} block, where a directive prints as text instead of running.
+    {endcomment}
+    {if:site.features.newsletter}
+      <div class="text-center mb-4">
+        {include:`partials/newsletter-signup.html.dtmpl`}
+      </div>
+    {endif}
     <p class="mb-0 text-muted small text-center">
       &copy; {var:site.label}. Powered by CoolMS2.
     </p>
