@@ -1,0 +1,13 @@
+# Packagist serves a git archive, so what is NOT export-ignored here is
+# what every consumer downloads.
+#
+# `.github/` workflows only ever run in this repository, and
+# `package-lock.json` pins an npm tree for the asset build -- neither is
+# reachable or usable from the other side of `composer require`. Together
+# they were 0.11 MB of a 0.25 MB archive.
+#
+# Tests are deliberately NOT excluded here: that is an estate-wide
+# convention question, not this package s to answer alone.
+.github/          export-ignore
+package-lock.json export-ignore
+.gitattributes    export-ignore
