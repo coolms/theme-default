@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
  *   ThemeDefaultProvider
  *     - Autoconfigured: ThemeBundle's Extension registers ThemeProviderInterface for
  *       autoconfiguration with the 'coolms.theme_provider' tag, so no manual tagging
- *       is needed here — setAutoconfigured(true) is sufficient.
+ *       is needed here -- setAutoconfigured(true) is sufficient.
  *
  *     - Autoconfigured: FrameworkBundle registers EventSubscriberInterface for
  *       autoconfiguration with the 'kernel.event_subscriber' tag.
@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
  *     - Autoconfigured: ThemeBundle's Extension registers ThemeAssetsProviderInterface for
  *       autoconfiguration with the 'coolms.theme_assets_provider' tag. ThemeAssetsRegistryPass
  *       then wires it into ThemeAssetsRegistry.
- *     - No constructor args needed — manifest path resolution is purely filesystem-based.
+ *     - No constructor args needed -- manifest path resolution is purely filesystem-based.
  */
 final class ThemeDefaultExtension extends Extension
 {
