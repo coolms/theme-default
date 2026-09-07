@@ -1,0 +1,61 @@
+type: theme-seed
+
+# The starting content coolms-default ships.
+#
+# ⚠️ THERE IS NO `path: /` HERE, AND THAT IS THE POINT.
+#
+# `pages/home.html.dtmpl` puts the first-run panel in the `{else}` branch of
+# `{if:content.body}`, so it disappears the moment somebody writes the front
+# page -- nothing to find, nothing to switch off, no setting to discover.
+# Seeding a body at `/` would switch the panel off permanently and replace a
+# self-removing placeholder with one an editor has to know to delete. The panel
+# answers "did it work, and where do I go next", and it has to be there on the
+# first visit or it answers nothing.
+#
+# ⚠️ `privacy` IS seeded, and the difference is not inconsistency. The `{else}`
+# device only works where a Node exists WITHOUT a body -- the front page has one
+# because `/content/{site}` is the section root. Nothing minted a Node for
+# `/privacy`, so its `{else}` stub could never render at all: `/privacy` was a
+# 404 while the cookie notice and the footer both linked to it. A stub that
+# cannot render is not a self-replacing placeholder, it is dead template. So the
+# page is seeded with the same honest text, and the template's `{else}` stays as
+# the fallback for a site whose privacy page has been deleted.
+#
+# ⚠️ Bodies are HTML with no `{` in them. A stored page body is pre-rendered
+# through the template engine before it reaches the outer template -- that is
+# what lets an editor put a widget in a page -- so a stray brace is a lexer
+# token, not a character. A body that needs one writes `&#123;`.
+pages:
+  - path: about
+    locale: en
+    title: About
+    order: 10
+    body: pages/about.html
+
+  - path: contact
+    locale: en
+    title: Contact
+    order: 20
+    body: pages/contact.html
+
+  # ⚠️ NO `template:` HERE, DELIBERATELY -- the NaviNode carries it instead.
+  #
+  # Both would work while the page exists, and a variant override (resolver
+  # priority 10) would win over the NaviNode (priority 30). Measured what each
+  # one is worth with the page deleted:
+  #
+  #   page absent, NaviNode template absent  -> pages/page.html.dtmpl, and the
+  #                                             `{else}` stub is unreachable
+  #   page absent, NaviNode template present -> privacy template + the stub
+  #
+  # So the NaviNode covers BOTH cases and the manifest key covers one. Two
+  # copies that agree today are two copies that can disagree later, and the
+  # variant is the one that would silently win -- so the redundant half is the
+  # one here. `WebDefaultNaviProvider` naming a theme template is also the
+  # existing convention in that file, not a new coupling: `/`, `/login`,
+  # `/register` and both password routes each name one already.
+  - path: privacy
+    locale: en
+    title: Privacy
+    order: 90
+    body: pages/privacy.html

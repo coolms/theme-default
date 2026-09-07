@@ -8,6 +8,13 @@
     {loop:site.theme.css}
         <link rel="stylesheet" href="{var:item.url}">
     {endloop}
+    {comment}
+      The  declared by the partials this page reaches, gathered before
+      the render and written once. Last in the head so a partial's own rules
+      outrank the theme's general ones on a tie -- see the same block in
+      .
+    {endcomment}
+    {var:_assets.css}
 </head>
 <body>
     {slot:body}
@@ -20,6 +27,7 @@
     {loop:site.theme.js}
         <script src="{var:item.url}" type="module"></script>
     {endloop}
+    {var:_assets.js}
     {slot:scripts}
     {comment}
       Two widgets that make a PROMISE to a visitor, gated here rather than

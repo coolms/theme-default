@@ -21,7 +21,7 @@
     {if:hasChildren}
       <li class="nav-item dropdown{if:node.isActive} active{endif}">
         <a class="nav-link dropdown-toggle{if:node.isCurrentPage} active{endif}"
-           href="{var:node.href}"
+           href="{var:node.href href}"
            data-bs-toggle="dropdown"
            {if:node.isCurrentPage}aria-current="page"{endif}>
           {var:node.label}
@@ -32,7 +32,7 @@
             {if:hasGrandchildren}
               <li class="dropdown-submenu">
                 <a class="dropdown-item dropdown-toggle{if:child.isCurrentPage} active{endif}"
-                   href="{var:child.href}"
+                   href="{var:child.href href}"
                    {if:child.target}target="{var:child.target}"{endif}
                    {if:child.isExternal}rel="noopener noreferrer"{endif}
                    {if:child.isCurrentPage}aria-current="page"{endif}>
@@ -42,7 +42,7 @@
                   {loop:child.children:grandchild}
                     <li>
                       <a class="dropdown-item{if:grandchild.isCurrentPage} active{endif}"
-                         href="{var:grandchild.href}"
+                         href="{var:grandchild.href href}"
                          {if:grandchild.target}target="{var:grandchild.target}"{endif}
                          {if:grandchild.isExternal}rel="noopener noreferrer"{endif}
                          {if:grandchild.isCurrentPage}aria-current="page"{endif}>
@@ -56,7 +56,7 @@
             {unless:hasGrandchildren}
               <li>
                 <a class="dropdown-item{if:child.isCurrentPage} active{endif}"
-                   href="{var:child.href}"
+                   href="{var:child.href href}"
                    {if:child.target}target="{var:child.target}"{endif}
                    {if:child.isExternal}rel="noopener noreferrer"{endif}
                    {if:child.isCurrentPage}aria-current="page"{endif}>
@@ -71,7 +71,7 @@
     {unless:hasChildren}
       <li class="nav-item{if:node.isActive} active{endif}">
         <a class="nav-link{if:node.isCurrentPage} active{endif}"
-           href="{var:node.href}"
+           href="{var:node.href href}"
            {if:node.target}target="{var:node.target}"{endif}
            {if:node.isExternal}rel="noopener noreferrer"{endif}
            {if:node.isCurrentPage}aria-current="page"{endif}>

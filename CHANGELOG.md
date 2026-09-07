@@ -20,7 +20,7 @@ this package on its own produced:
 Interface "Symfony\Component\Config\Definition\ConfigurableInterface" not found
 ```
 
-⚠️ **Invisible in any application that installs `symfony/framework-bundle`**,
+!! **Invisible in any application that installs `symfony/framework-bundle`**,
 which pulls `symfony/config` in transitively -- which is every application
 this theme had ever been installed into. Found by resolving the package from
 its tag into an empty tree and then checking that every `use` statement in
@@ -67,5 +67,5 @@ and render a front page.
 Starts at 2.0.0 for the same reason as its base: it requires `coolms/core`
 and is therefore a lockstep member, and lockstep members share a major.
 
-⚠️ Its requirement on `coolms/theme-bootstrap` moved from `^1.0` to `^2.0`
+!! Its requirement on `coolms/theme-bootstrap` moved from `^1.0` to `^2.0`
 in this release, because the base moved with it.
