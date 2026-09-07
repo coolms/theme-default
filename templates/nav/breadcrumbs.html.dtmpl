@@ -8,7 +8,7 @@
       {endif}
       {unless:crumb.isCurrent}
         <li{loop:config.item_attr} {var:item.key}="{var:item.value}"{endloop}>
-          <a href="{var:crumb.href}">{var:crumb.label}</a>
+          <a href="{var:crumb.href href}">{var:crumb.label}</a>
         </li>
       {endunless}
     {endloop}
