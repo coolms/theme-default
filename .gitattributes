@@ -7,7 +7,7 @@
 # they were 0.11 MB of a 0.25 MB archive.
 #
 # Tests are deliberately NOT excluded here: that is an estate-wide
-# convention question, not this package s to answer alone.
+# convention question, not this package's to answer alone.
 .github/          export-ignore
 package-lock.json export-ignore
 .gitattributes    export-ignore
