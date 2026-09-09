@@ -5,6 +5,21 @@ All notable changes to `coolms/theme-default` are recorded here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
+## 2.0.0-alpha5 - 2026-09-10
+
+### Fixed
+
+**`coolms/dtmpl` is declared.** These templates filter navigation URLs through
+`href` in six places, and that filter arrived in dtmpl 2.1.0 -- there is no
+filter of that name at v2.0.0.
+
+The engine was reaching this package only through `coolms/theme-bootstrap`,
+which is the sole-holder shape: a dependency present because something else asks
+for it, and gone the moment that something else stops. Declared here at the
+version that actually has the filter.
+
+Nothing else changes. Same templates, one added requirement.
+
 ## 2.0.0-alpha4 - 2026-09-09
 ### Added
 
