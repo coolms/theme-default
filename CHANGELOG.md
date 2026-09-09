@@ -5,6 +5,20 @@ All notable changes to `coolms/theme-default` are recorded here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
+## 2.0.0-alpha4 - 2026-09-09
+### Added
+
+- The base layout emits the `{css}` and `{js}` blocks gathered from the page and
+  its widgets. A `{css}` block declared in a template was inert until now.
+
+### Changed
+
+- Navigation URLs are filtered through `href`.
+- The block partials are shared, and this theme overrides only what differs.
+- The npm lockfile and the workflow directory are export-ignored.
+- Comments and changelogs are ascii, and the readme no longer describes a test
+  suite this package does not have.
+
 ## 2.0.0-alpha3 - 2026-09-03
 
 ### Fixed
