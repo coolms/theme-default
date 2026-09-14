@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoolMS\ThemeDefault\Asset;
 
-use CoolMS\Core\Theme\ThemeAssetsProviderInterface;
 use CoolMS\Core\Theme\ThemeAssets;
+use CoolMS\Core\Theme\ThemeAssetsProviderInterface;
 
 /**
  * Resolves compiled asset URLs for the coolms-default theme by reading
