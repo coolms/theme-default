@@ -5,6 +5,15 @@ All notable changes to `coolms/theme-default` are recorded here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
+## Unreleased
+
+### Added
+
+- Declares `support` -- `issues` and `source` -- so a page imported from this
+  package, and the catalogue, know where a correction is filed. Packagist filled
+  the gap from GitHub when the manifest was silent; the declared field is the
+  one that holds on any registry.
+
 ## 2.0.0-alpha5 - 2026-09-10
 
 ### Fixed

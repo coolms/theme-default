@@ -8,6 +8,10 @@
             "name": "CoolMS Team"
         }
     ],
+    "support": {
+        "issues": "https://github.com/coolms/theme-default/issues",
+        "source": "https://github.com/coolms/theme-default"
+    },
     "require": {
         "coolms/core": "^2.0",
         "coolms/dtmpl": "^2.1",
