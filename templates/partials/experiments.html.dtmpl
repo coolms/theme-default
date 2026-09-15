@@ -58,12 +58,14 @@
     var variant = assignments[key];
     if (!variant || !consented()) return;
     try {
+      // same-origin so the consent cookie reaches the server and the recorded
+      // event carries the visitor's actual consent (see analytics.html.dtmpl).
       fetch('/api/v1/experiments/conversion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: key, variant: variant }),
         keepalive: true,
-        credentials: 'omit'
+        credentials: 'same-origin'
       }).catch(function(){});
     } catch (e) { /* best-effort */ }
   }
@@ -87,7 +89,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ key: key, variant: assignments[key] }),
           keepalive: true,
-          credentials: 'omit'
+          credentials: 'same-origin'
         }).catch(function(){});
       } catch (e) { /* best-effort */ }
     });

@@ -21,12 +21,18 @@
     if (sent || !consented()) return;
     sent = true;
     try {
+      // same-origin so the consent cookie travels with the beacon: the server
+      // reads the visitor's granted categories off that cookie and stamps them
+      // on the row, so a consented view is recorded as one. With 'omit' the
+      // cookie stayed behind and every consented view was recorded as
+      // necessary-only. No auth rides along: the token cookie is only honoured
+      // with the X-Widget-Request header, which this beacon never sends.
       fetch('/api/v1/analytics/pageview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path: location.pathname }),
         keepalive: true,
-        credentials: 'omit'
+        credentials: 'same-origin'
       }).catch(function(){});
     } catch (e) { /* analytics is best-effort */ }
   }
