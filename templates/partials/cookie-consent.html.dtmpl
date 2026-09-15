@@ -20,13 +20,22 @@
 .cookie-consent__cat p{margin:.1rem 0 0;font-size:.82rem;color:#6b7280;line-height:1.35}
 .cookie-consent__cat input{margin-top:.2rem;width:1rem;height:1rem;flex-shrink:0}
 .cookie-consent__save{margin-top:.6rem;text-align:right}
-</style>
-<div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite" hidden>
+</style>{endverbatim}
+{comment}
+  The words come from the consent text version in force (the `consent.*`
+  context the platform contributes on every page), so what the visitor reads
+  is what the record they make will name -- version, locale and the digest of
+  these exact texts. The defaults are the version-1 English words, for a
+  render without the context. A theme that puts its own words here records a
+  version whose text the person did not read.
+{endcomment}
+<div class="cookie-consent" id="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite" hidden
+     data-consent-version="{var:consent.version default=``}" data-consent-locale="{var:consent.locale default=`en`}" data-consent-renewal="{var:consent.renewalSeconds default=`15552000`}">
   <div class="cookie-consent__inner">
     <!-- /privacy, not /privacy.html: the installer creates that node (see
          WebDefaultNaviProvider), so this link resolves on a fresh install. The
          old hard-coded .html target 404'd on every one of them. -->
-    <p class="cookie-consent__text">We use cookies to make this site work and, with your consent, to improve it and tailor content. See our <a href="/privacy">privacy policy</a>.</p>
+    <p class="cookie-consent__text">{var:consent.texts.intro default=`We use cookies to make this site work and, with your consent, to improve it and tailor content.`} See our <a href="/privacy">privacy policy</a>.</p>
     <div class="cookie-consent__actions">
       <button type="button" class="cookie-consent__btn cookie-consent__btn--decline" data-cc="decline">Decline all</button>
       <button type="button" class="cookie-consent__btn cookie-consent__btn--customize" data-cc="customize" aria-expanded="false" aria-controls="cookie-consent-panel">Customize</button>
@@ -36,26 +45,26 @@
   <div class="cookie-consent__panel" id="cookie-consent-panel" hidden>
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-necessary" checked disabled />
-      <div><label for="cc-necessary">Necessary</label><p>Required for the site to function. Always on.</p></div>
+      <div><label for="cc-necessary">Necessary</label><p>{var:consent.texts.necessary default=`Required for the site to function. Always on.`}</p></div>
     </div>
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-analytics" data-cat="analytics" />
-      <div><label for="cc-analytics">Analytics</label><p>Helps us understand how the site is used so we can improve it.</p></div>
+      <div><label for="cc-analytics">Analytics</label><p>{var:consent.texts.analytics default=`Helps us understand how the site is used so we can improve it.`}</p></div>
     </div>
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-personalization" data-cat="personalization" />
-      <div><label for="cc-personalization">Personalization</label><p>Tailors the content you see to what is most relevant to you.</p></div>
+      <div><label for="cc-personalization">Personalization</label><p>{var:consent.texts.personalization default=`Tailors the content you see to what is most relevant to you.`}</p></div>
     </div>
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-marketing" data-cat="marketing" />
-      <div><label for="cc-marketing">Marketing</label><p>Lets us measure and improve our marketing.</p></div>
+      <div><label for="cc-marketing">Marketing</label><p>{var:consent.texts.marketing default=`Lets us measure and improve our marketing.`}</p></div>
     </div>
     <div class="cookie-consent__save">
       <button type="button" class="cookie-consent__btn cookie-consent__btn--accept" data-cc="save">Save choices</button>
     </div>
   </div>
 </div>
-<script>
+{verbatim}<script>
 (function(){
   if (window.__coolmsConsentBound) return;
   window.__coolmsConsentBound = true;
@@ -63,6 +72,14 @@
   var CATEGORIES = ['necessary', 'analytics', 'personalization', 'marketing'];
   var banner = document.getElementById('cookie-consent');
   var panel = document.getElementById('cookie-consent-panel');
+  // The text version in force, its locale, and the renewal interval -- from
+  // the platform, on every page. Without them (a theme rendered outside the
+  // platform) the banner still works as a plain cookie banner.
+  var cfg = {
+    version: banner ? (banner.getAttribute('data-consent-version') || '') : '',
+    locale: banner ? (banner.getAttribute('data-consent-locale') || 'en') : 'en',
+    renewalSeconds: banner ? (parseInt(banner.getAttribute('data-consent-renewal'), 10) || 15552000) : 15552000
+  };
 
   /**
    * Publish the banner's occupied height so bottom-anchored UI can clear it.
@@ -80,59 +97,122 @@
     return m ? decodeURIComponent(m.slice(name.length + 1)) : '';
   }
 
-  // The canonical grant check — mirrors the backend's ...\RequestConsent.
-  //Reads the granular comma-list AND the legacy binary: a legacy
+  // The cookie carries the categories and, beside them, two tokens the server
+  // judges currency by: `v:<version>` the text the decision was made under,
+  // `t:<day>` the UTC day it was made. Both readers -- the platform's and the
+  // gate partials' -- drop tokens they do not know, so the categories still
+  // read as before.
+  function parts(raw){
+    return String(raw || '').toLowerCase().split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+  function categoriesOf(raw){
+    if (raw === 'accepted') return ['necessary', 'analytics', 'personalization'];
+    if (raw === '' || raw === 'declined') return ['necessary'];
+    return parts(raw).filter(function(p){ return CATEGORIES.indexOf(p) !== -1; });
+  }
+  function versionOf(raw){
+    var v = parts(raw).filter(function(p){ return p.indexOf('v:') === 0; })[0];
+    // A cookie written before the token existed is a decision under the first version.
+    return v ? v.slice(2) : 'v1';
+  }
+
+  // The canonical grant check -- mirrors the backend's ...\RequestConsent.
+  // Reads the granular comma-list AND the legacy binary: a legacy
   // `accepted` covers analytics + personalization (NOT marketing); `declined`/
   // absent grants only necessary. Shared by the analytics / experiments /
   // personalization gate partials via window.coolmsConsent.has().
   function granted(cat){
     var raw = String(getCookie(KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
     if (cat === 'necessary') return true;
-    if (raw === 'accepted') return cat === 'analytics' || cat === 'personalization';
-    if (raw === '' || raw === 'declined') return false;
-    return raw.split(',').map(function(s){ return s.trim(); }).indexOf(cat) !== -1;
+    return categoriesOf(raw).indexOf(cat) !== -1;
   }
+
+  function grantList(cats){
+    // necessary is always granted; keep canonical order.
+    return CATEGORIES.filter(function(c){ return c === 'necessary' || cats.indexOf(c) !== -1; });
+  }
+
+  // Tell the platform. Best-effort: the cookie is written first and stands on
+  // its own; the record is what answers "what is true now" for a subject the
+  // platform can name, and a withdrawal is a NEW record, never an edit.
+  function record(cats){
+    if (!cfg.version || typeof fetch !== 'function') return;
+    try {
+      fetch('/api/v1/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ granted: cats, version: cfg.version, locale: cfg.locale }),
+        keepalive: true,
+        credentials: 'same-origin'
+      }).catch(function(){});
+    } catch (e) { /* consent is recorded best-effort; the cookie already holds the decision */ }
+  }
+
+  function persist(cats){
+    var value = cats.join(',');
+    var stored = cfg.version
+      ? value + ',v:' + cfg.version + ',t:' + Math.floor(Date.now() / 86400000)
+      : value;
+    // Max-Age is the renewal interval: the browser's copy of the decision
+    // must not outlive the decision. When it lapses the banner asks again.
+    document.cookie = KEY + '=' + encodeURIComponent(stored) + '; Max-Age=' + cfg.renewalSeconds + '; Path=/; SameSite=Lax';
+    // Flip data-consent so the deferred gate partials (which observe it) re-run.
+    document.documentElement.setAttribute('data-consent', value);
+    if (banner){ banner.setAttribute('hidden', ''); }
+    publishHeight();
+    record(cats);
+  }
+
+  function reflectCurrentChoices(){
+    if (!panel) return;
+    var current = categoriesOf(String(getCookie(KEY) || '').toLowerCase().trim());
+    Array.prototype.forEach.call(panel.querySelectorAll('input[data-cat]'), function(input){
+      input.checked = current.indexOf(input.getAttribute('data-cat')) !== -1;
+    });
+  }
+
+  // Withdrawal needs a door. Reopens the banner with the panel showing the
+  // choices in force; Save writes the new (possibly narrower) decision.
+  // A footer link with data-cc-open calls this; so can any script.
+  function reopen(){
+    if (!banner) return;
+    reflectCurrentChoices();
+    panel.removeAttribute('hidden');
+    var customize = banner.querySelector('[data-cc="customize"]');
+    if (customize) customize.setAttribute('aria-expanded', 'true');
+    banner.removeAttribute('hidden');
+    publishHeight();
+  }
+
   window.coolmsConsent = {
     has: granted,
-    get raw(){ return getCookie(KEY); }
+    get raw(){ return getCookie(KEY); },
+    reopen: reopen,
+    version: cfg.version
   };
+
+  document.addEventListener('click', function(e){
+    var opener = e.target && e.target.closest ? e.target.closest('[data-cc-open]') : null;
+    if (!opener) return;
+    e.preventDefault();
+    reopen();
+  });
 
   if (!banner) return;
 
-  function persist(value){
-    document.cookie = KEY + '=' + encodeURIComponent(value) + '; Max-Age=' + (60*60*24*180) + '; Path=/; SameSite=Lax';
-    // Flip data-consent so the deferred gate partials (which observe it) re-run.
-    document.documentElement.setAttribute('data-consent', value);
-    banner.setAttribute('hidden', '');
-    publishHeight();
-  }
-  function grantList(cats){
-    // necessary is always granted; keep canonical order.
-    return CATEGORIES.filter(function(c){ return c === 'necessary' || cats.indexOf(c) !== -1; }).join(',');
-  }
-
-  var existing = getCookie(KEY);
-  if (existing){
-    // Already decided — expose the choice for conditional scripts, stay hidden.
-    document.documentElement.setAttribute('data-consent', existing);
-    return;
-  }
-
-  banner.removeAttribute('hidden');
-  publishHeight();
   // Customize opens a panel and the text wraps on a narrow screen: the height
-  // this reserves has to follow the banner rather than be guessed once.
+  // this reserves has to follow the banner rather than be guessed once. Bound
+  // before the visibility decision so a reopened banner behaves the same.
   if (typeof ResizeObserver !== 'undefined'){
     new ResizeObserver(publishHeight).observe(banner);
   } else {
     window.addEventListener('resize', publishHeight);
   }
-
   banner.addEventListener('click', function(e){
     var btn = e.target && e.target.closest ? e.target.closest('[data-cc]') : null;
     if (!btn) return;
     var action = btn.getAttribute('data-cc');
-    if (action === 'decline') { persist('necessary'); return; }
+    if (action === 'decline') { persist(['necessary']); return; }
     if (action === 'accept')  { persist(grantList(CATEGORIES)); return; }
     if (action === 'customize'){
       var open = panel.hasAttribute('hidden');
@@ -148,5 +228,20 @@
       persist(grantList(chosen));
     }
   });
+
+  var existing = getCookie(KEY);
+  if (existing){
+    // Decided under the text version in force: expose the choice for the
+    // conditional scripts and stay hidden. Decided under an OLDER version: the
+    // text has changed meaning since, so that consent is not current -- ask
+    // again, and expose nothing until answered.
+    if (!cfg.version || versionOf(existing) === cfg.version){
+      document.documentElement.setAttribute('data-consent', existing);
+      return;
+    }
+  }
+
+  banner.removeAttribute('hidden');
+  publishHeight();
 })();
 </script>{endverbatim}

@@ -16,6 +16,14 @@
     {endif}
     <p class="mb-0 text-muted small text-center">
       &copy; {var:site.label}. Powered by CoolMS2.
+      {comment}
+        Withdrawal needs a door the visitor can find: this reopens the consent
+        banner with the choices in force, and Save records the new decision.
+        Only where the banner exists -- the link's handler lives in it.
+      {endcomment}
+      {if:site.features.cookieConsent}
+        &middot; <a href="#cookie-consent" class="text-muted" data-cc-open>Cookie settings</a>
+      {endif}
     </p>
   </div>
 </footer>
