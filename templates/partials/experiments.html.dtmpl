@@ -13,8 +13,12 @@
   function setCookie(name, value){
     document.cookie = name + '=' + encodeURIComponent(value) + '; Max-Age=' + (60*60*24*365) + '; Path=/; SameSite=Lax';
   }
+  function clearCookie(name){
+    document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax';
+  }
   function consented(){
-    // tiered consent — analytics category (exposure/conversion beacons).
+    // tiered consent — analytics category. The arm assignment, the exposure
+    // beacon and the conversion beacon all hang on this one read.
     // Legacy `accepted` grants analytics; the granular form is a comma-list.
     var raw = String(getCookie(CONSENT_KEY) || document.documentElement.getAttribute('data-consent') || '').toLowerCase().trim();
     if (raw === 'accepted') return true;
@@ -33,18 +37,29 @@
     }
     return variants[variants.length - 1].key;
   }
+  // The control arm is the first declared variant.
+  function control(exp){ return exp.variants[0].key; }
 
-  // Sticky assignment: a per-experiment cookie keeps the visitor in the same arm
-  // across visits. The assignment cookie is functional (not analytics), so it is
-  // set regardless of consent; only the exposure beacon below is consent-gated.
+  // Participation follows analytics consent. Without it the visitor sees the
+  // control arm, takes no part in the experiment and nothing is stored: no
+  // arm cookie is set, and one left from an earlier consent is removed. With
+  // it, a per-experiment cookie keeps the visitor in the same arm across
+  // visits for a year, and the beacons below report the arm.
+  var participating = consented();
   var assignments = {};
   experiments.forEach(function(exp){
     if (!exp.variants || !exp.variants.length) return;
     var cookieName = 'coolms_exp_' + exp.key;
-    var variant = getCookie(cookieName);
-    var known = exp.variants.some(function(v){ return v.key === variant; });
-    if (!known){ variant = pick(exp.variants); setCookie(cookieName, variant); }
-    assignments[exp.key] = variant;
+    var variant;
+    if (participating){
+      variant = getCookie(cookieName);
+      var known = exp.variants.some(function(v){ return v.key === variant; });
+      if (!known){ variant = pick(exp.variants); setCookie(cookieName, variant); }
+      assignments[exp.key] = variant;
+    } else {
+      if (getCookie(cookieName)) clearCookie(cookieName);
+      variant = control(exp);
+    }
     // Expose the arm to CSS (attribute selectors) + JS (the helper below).
     document.documentElement.setAttribute('data-exp-' + exp.key, variant);
   });
@@ -52,8 +67,9 @@
   window.coolmsExperiment = function(key){ return assignments[key] || null; };
 
   // Conversion beacon — fire when the experiment's goal is hit for the visitor's
-  // assigned arm. Consent-gated like the exposure beacon, and a no-op for any
-  // key the visitor wasn't bucketed into (e.g. a since-stopped experiment).
+  // assigned arm. A no-op for a visitor who is not participating (no arm was
+  // assigned) and for any key the visitor wasn't bucketed into (e.g. a
+  // since-stopped experiment).
   function convert(key){
     var variant = assignments[key];
     if (!variant || !consented()) return;
@@ -80,7 +96,7 @@
     if (key) convert(key);
   }, true);
 
-  // Exposure beacon — anonymous aggregate counts, consent-gated like analytics.
+  // Exposure beacon — anonymous aggregate counts, one per assigned arm.
   function report(){
     Object.keys(assignments).forEach(function(key){
       try {
@@ -94,11 +110,20 @@
       } catch (e) { /* best-effort */ }
     });
   }
-  var reported = false;
-  function maybeReport(){ if (reported || !consented()) return; reported = true; report(); }
-  if (consented()){ maybeReport(); return; }
+  if (participating){ report(); return; }
+
+  // Consent granted during this page view: the visitor is enrolled for the
+  // NEXT view (arm drawn, cookie set), and this view stays what it showed, the
+  // control arm -- it reports no exposure and records no conversion.
+  function enrol(){
+    experiments.forEach(function(exp){
+      if (!exp.variants || !exp.variants.length) return;
+      var cookieName = 'coolms_exp_' + exp.key;
+      if (!getCookie(cookieName)) setCookie(cookieName, pick(exp.variants));
+    });
+  }
   if (window.MutationObserver){
-    var obs = new MutationObserver(function(){ if (consented()){ maybeReport(); obs.disconnect(); } });
+    var obs = new MutationObserver(function(){ if (consented()){ enrol(); obs.disconnect(); } });
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-consent'] });
   }
 })();
