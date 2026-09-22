@@ -12,16 +12,14 @@
     {unless:flashes.success}
       {if:request.query.token}
         <p class="text-muted">An account has been prepared for you. Choose a password to take it.</p>
-        {comment}The token from the mailed link is the credential: it works once and expires. No CSRF token: a forged post could only spend a token the attacker already holds.{endcomment}
-        <form action="/auth/invitation/accept" method="POST">
-          <input type="hidden" name="token" value="{var:request.query.token escape}">
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password"
-                   required autocomplete="new-password" minlength="8">
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Set password and sign in</button>
-        </form>
+        {comment}
+          The FORM is the Identity module's definition
+          (`config/modules/identity/forms/invitation-accept.yaml`), which carries
+          the hidden token field filled from the mailed link. The BRANCH stays
+          here: whether a page shows a form or an explanation is the page's
+          business, and a form definition has no opinion about it.
+        {endcomment}
+        {widget:form:`identity.invitation_accept`}
       {else}
         <div class="alert alert-warning">This page is opened from the link in an invitation mail. Open the link, or ask to be invited again.</div>
       {endif}
