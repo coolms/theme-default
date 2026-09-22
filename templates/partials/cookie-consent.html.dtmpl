@@ -35,7 +35,7 @@
     <!-- /privacy, not /privacy.html: the installer creates that node (see
          WebDefaultNaviProvider), so this link resolves on a fresh install. The
          old hard-coded .html target 404'd on every one of them. -->
-    <p class="cookie-consent__text">{var:consent.texts.intro default=`We use cookies to make this site work and, with your consent, to improve it and tailor content.`} See our <a href="/privacy">privacy policy</a>.</p>
+    <p class="cookie-consent__text">{var:consent.texts.intro default=`We use cookies to make this site work and, with your consent, to measure how it is used, recognise you when you return, and tailor content.`} See our <a href="/privacy">privacy policy</a>.</p>
     <div class="cookie-consent__actions">
       <button type="button" class="cookie-consent__btn cookie-consent__btn--decline" data-cc="decline">Decline all</button>
       <button type="button" class="cookie-consent__btn cookie-consent__btn--customize" data-cc="customize" aria-expanded="false" aria-controls="cookie-consent-panel">Customize</button>
@@ -50,6 +50,10 @@
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-analytics" data-cat="analytics" />
       <div><label for="cc-analytics">Analytics</label><p>{var:consent.texts.analytics default=`Helps us understand how the site is used so we can improve it.`}</p></div>
+    </div>
+    <div class="cookie-consent__cat">
+      <input type="checkbox" id="cc-recognition" data-cat="recognition" data-implies="analytics" />
+      <div><label for="cc-recognition">Recognition</label><p>{var:consent.texts.recognition default=`Remembers this browser across visits, so we can recognise you when you return and keep one history of your visits over time. Recognising requires measuring, so this also grants Analytics.`}</p></div>
     </div>
     <div class="cookie-consent__cat">
       <input type="checkbox" id="cc-personalization" data-cat="personalization" />
@@ -69,7 +73,11 @@
   if (window.__coolmsConsentBound) return;
   window.__coolmsConsentBound = true;
   var KEY = 'coolms_consent';
-  var CATEGORIES = ['necessary', 'analytics', 'personalization', 'marketing'];
+  var CATEGORIES = ['necessary', 'analytics', 'recognition', 'personalization', 'marketing'];
+  // Recognising implies measuring: the one entailment, mirrored from the
+  // platform's vocabulary. The server applies it whatever the cookie says;
+  // the banner applies it so the visitor sees what they are granting.
+  var IMPLIES = { recognition: ['analytics'] };
   var banner = document.getElementById('cookie-consent');
   var panel = document.getElementById('cookie-consent-panel');
   // The text version in force, its locale, and the renewal interval -- from
@@ -128,8 +136,25 @@
   }
 
   function grantList(cats){
-    // necessary is always granted; keep canonical order.
-    return CATEGORIES.filter(function(c){ return c === 'necessary' || cats.indexOf(c) !== -1; });
+    // necessary is always granted; entailments applied; canonical order.
+    var wanted = cats.slice();
+    cats.forEach(function(c){ (IMPLIES[c] || []).forEach(function(i){ wanted.push(i); }); });
+    return CATEGORIES.filter(function(c){ return c === 'necessary' || wanted.indexOf(c) !== -1; });
+  }
+  // The panel enforces the same relation while the visitor is choosing:
+  // ticking Recognition ticks Analytics; unticking Analytics unticks Recognition.
+  function entail(changed){
+    if (!panel) return;
+    var cat = changed.getAttribute('data-cat');
+    if (changed.checked){
+      (IMPLIES[cat] || []).forEach(function(i){
+        var box = panel.querySelector('input[data-cat="' + i + '"]'); if (box) box.checked = true;
+      });
+    } else {
+      Array.prototype.forEach.call(panel.querySelectorAll('input[data-cat]'), function(box){
+        if ((IMPLIES[box.getAttribute('data-cat')] || []).indexOf(cat) !== -1) box.checked = false;
+      });
+    }
   }
 
   // Tell the platform. Best-effort: the cookie is written first and stands on
@@ -207,6 +232,11 @@
     new ResizeObserver(publishHeight).observe(banner);
   } else {
     window.addEventListener('resize', publishHeight);
+  }
+  if (panel){
+    panel.addEventListener('change', function(e){
+      if (e.target && e.target.matches && e.target.matches('input[data-cat]')) entail(e.target);
+    });
   }
   banner.addEventListener('click', function(e){
     var btn = e.target && e.target.closest ? e.target.closest('[data-cc]') : null;
