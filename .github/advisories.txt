@@ -1,0 +1,35 @@
+# Advisories known in this repository's committed lockfile and not yet cleared.
+# The advisories job (coolms/.github, npm-advisories.yml) fails on an advisory that is not here, and on a line here
+# whose advisory is no longer reported, so this list only shrinks: take a line off when an update clears it.
+#
+#   <package> <advisory id> <severity> <why it stays>
+#
+# Started 2026-10-07 with what `npm audit` reported then: 26 advisory(ies) over 10 package(s). Each stays until an
+# update clears it; an update is a change of its own, made and reviewed as one.
+
+dompurify      GHSA-55q2-fjhq-7xh7  moderate  present when the list was started; awaiting an update
+dompurify      GHSA-6688-9rhm-gjv2  low       present when the list was started; awaiting an update
+dompurify      GHSA-c2j3-45gr-mqc4  low       present when the list was started; awaiting an update
+dompurify      GHSA-cmwh-pvxp-8882  moderate  present when the list was started; awaiting an update
+esbuild        GHSA-67mh-4wv8-2f99  moderate  present when the list was started; awaiting an update
+immutable      GHSA-v56q-mh7h-f735  high      present when the list was started; awaiting an update
+immutable      GHSA-xvcm-6775-5m9r  high      present when the list was started; awaiting an update
+katex          GHSA-238p-pmpm-9mq7  low       present when the list was started; awaiting an update
+mermaid        GHSA-2v8p-3f2j-5mp7  moderate  present when the list was started; awaiting an update
+mermaid        GHSA-3rrr-jr9j-h3q3  moderate  present when the list was started; awaiting an update
+mermaid        GHSA-6x64-9x62-f2gx  moderate  present when the list was started; awaiting an update
+mermaid        GHSA-c4c3-pg64-4m4v  low       present when the list was started; awaiting an update
+mermaid        GHSA-rhh3-jpg6-66xh  moderate  present when the list was started; awaiting an update
+nanoid         GHSA-28wg-ghj8-5hjv  high      present when the list was started; awaiting an update
+nanoid         GHSA-2v37-7h3g-55p8  high      present when the list was started; awaiting an update
+nanoid         GHSA-xwg4-73v4-xw9w  high      present when the list was started; awaiting an update
+picomatch      GHSA-3v7f-55p6-f55p  moderate  present when the list was started; awaiting an update
+picomatch      GHSA-c2c7-rcm5-vvqj  high      present when the list was started; awaiting an update
+postcss        GHSA-6g55-p6wh-862q  high      present when the list was started; awaiting an update
+postcss        GHSA-fxqj-rqcc-2cmp  moderate  present when the list was started; awaiting an update
+postcss        GHSA-qx2v-qp2m-jg93  moderate  present when the list was started; awaiting an update
+postcss        GHSA-r28c-9q8g-f849  high      present when the list was started; awaiting an update
+source-map-js  GHSA-68fv-2mgg-jv7q  high      present when the list was started; awaiting an update
+vite           GHSA-4w7w-66w2-5vf9  moderate  present when the list was started; awaiting an update
+vite           GHSA-fx2h-pf6j-xcff  high      present when the list was started; awaiting an update
+vite           GHSA-v6wh-96g9-6wx3  moderate  present when the list was started; awaiting an update
