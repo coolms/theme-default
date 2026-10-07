@@ -1,35 +1,37 @@
 # Advisories known in this repository's committed lockfile and not yet cleared.
-# The advisories job (coolms/.github, npm-advisories.yml) fails on an advisory that is not here, and on a line here
-# whose advisory is no longer reported, so this list only shrinks: take a line off when an update clears it.
+# The advisories job (coolms/.github, npm-advisories.yml) fails on an advisory that is not here, on a line here whose
+# advisory is no longer reported (so the list only shrinks), and on a line past its review date.
 #
-#   <package> <advisory id> <severity> <why it stays>
+#   <package> <advisory id> <severity> <review by> <why it stays>
 #
-# Started 2026-10-07 with what `npm audit` reported then: 26 advisory(ies) over 10 package(s). Each stays until an
-# update clears it; an update is a change of its own, made and reviewed as one.
+# Every line is reviewed again by its date: at most 30 days out for critical and high, 90 for the rest. A review writes
+# a new date and the reason as it stands then; an update that clears the advisory takes the line off instead. The
+# reasons below were measured on 2026-10-07 from this lockfile: which direct dependencies bring the package in, whether
+# it ships, and what npm offers to clear it.
 
-dompurify      GHSA-55q2-fjhq-7xh7  moderate  present when the list was started; awaiting an update
-dompurify      GHSA-6688-9rhm-gjv2  low       present when the list was started; awaiting an update
-dompurify      GHSA-c2j3-45gr-mqc4  low       present when the list was started; awaiting an update
-dompurify      GHSA-cmwh-pvxp-8882  moderate  present when the list was started; awaiting an update
-esbuild        GHSA-67mh-4wv8-2f99  moderate  present when the list was started; awaiting an update
-immutable      GHSA-v56q-mh7h-f735  high      present when the list was started; awaiting an update
-immutable      GHSA-xvcm-6775-5m9r  high      present when the list was started; awaiting an update
-katex          GHSA-238p-pmpm-9mq7  low       present when the list was started; awaiting an update
-mermaid        GHSA-2v8p-3f2j-5mp7  moderate  present when the list was started; awaiting an update
-mermaid        GHSA-3rrr-jr9j-h3q3  moderate  present when the list was started; awaiting an update
-mermaid        GHSA-6x64-9x62-f2gx  moderate  present when the list was started; awaiting an update
-mermaid        GHSA-c4c3-pg64-4m4v  low       present when the list was started; awaiting an update
-mermaid        GHSA-rhh3-jpg6-66xh  moderate  present when the list was started; awaiting an update
-nanoid         GHSA-28wg-ghj8-5hjv  high      present when the list was started; awaiting an update
-nanoid         GHSA-2v37-7h3g-55p8  high      present when the list was started; awaiting an update
-nanoid         GHSA-xwg4-73v4-xw9w  high      present when the list was started; awaiting an update
-picomatch      GHSA-3v7f-55p6-f55p  moderate  present when the list was started; awaiting an update
-picomatch      GHSA-c2c7-rcm5-vvqj  high      present when the list was started; awaiting an update
-postcss        GHSA-6g55-p6wh-862q  high      present when the list was started; awaiting an update
-postcss        GHSA-fxqj-rqcc-2cmp  moderate  present when the list was started; awaiting an update
-postcss        GHSA-qx2v-qp2m-jg93  moderate  present when the list was started; awaiting an update
-postcss        GHSA-r28c-9q8g-f849  high      present when the list was started; awaiting an update
-source-map-js  GHSA-68fv-2mgg-jv7q  high      present when the list was started; awaiting an update
-vite           GHSA-4w7w-66w2-5vf9  moderate  present when the list was started; awaiting an update
-vite           GHSA-fx2h-pf6j-xcff  high      present when the list was started; awaiting an update
-vite           GHSA-v6wh-96g9-6wx3  moderate  present when the list was started; awaiting an update
+dompurify      GHSA-55q2-fjhq-7xh7  moderate  2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
+dompurify      GHSA-6688-9rhm-gjv2  low       2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
+dompurify      GHSA-c2j3-45gr-mqc4  low       2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
+dompurify      GHSA-cmwh-pvxp-8882  moderate  2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
+esbuild        GHSA-67mh-4wv8-2f99  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); cleared by vite 8.3.3, a major upgrade.
+immutable      GHSA-v56q-mh7h-f735  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
+immutable      GHSA-xvcm-6775-5m9r  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
+katex          GHSA-238p-pmpm-9mq7  low       2027-01-05  In the built app (a direct dependency, and through mermaid); cleared by katex 0.19.0, a major upgrade.
+mermaid        GHSA-2v8p-3f2j-5mp7  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+mermaid        GHSA-3rrr-jr9j-h3q3  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+mermaid        GHSA-6x64-9x62-f2gx  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+mermaid        GHSA-c4c3-pg64-4m4v  low       2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+mermaid        GHSA-rhh3-jpg6-66xh  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+nanoid         GHSA-28wg-ghj8-5hjv  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+nanoid         GHSA-2v37-7h3g-55p8  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+nanoid         GHSA-xwg4-73v4-xw9w  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+picomatch      GHSA-3v7f-55p6-f55p  moderate  2027-01-05  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
+picomatch      GHSA-c2c7-rcm5-vvqj  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
+postcss        GHSA-6g55-p6wh-862q  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+postcss        GHSA-fxqj-rqcc-2cmp  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+postcss        GHSA-qx2v-qp2m-jg93  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+postcss        GHSA-r28c-9q8g-f849  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
+source-map-js  GHSA-68fv-2mgg-jv7q  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
+vite           GHSA-4w7w-66w2-5vf9  moderate  2027-01-05  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
+vite           GHSA-fx2h-pf6j-xcff  high      2026-11-06  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
+vite           GHSA-v6wh-96g9-6wx3  moderate  2027-01-05  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
