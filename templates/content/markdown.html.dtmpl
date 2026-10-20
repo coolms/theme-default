@@ -1,0 +1,8 @@
+{comment}
+  The CONTENT of a Markdown page, drawn inside the frame (decided 2026-10-20). Overrides the platform's
+  renderer of the same name.
+{endcomment}
+<article class="py-2 prose">
+  <h1>{var:page.title}</h1>
+  {var:content raw}
+</article>

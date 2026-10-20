@@ -4,9 +4,10 @@ type: theme-seed
 #
 # ⚠️ THERE IS NO `path: /` HERE, AND THAT IS THE POINT.
 #
-# `pages/home.html.dtmpl` puts the first-run panel in the `{else}` branch of
-# `{if:content.body}`, so it disappears the moment somebody writes the front
-# page -- nothing to find, nothing to switch off, no setting to discover.
+# The platform draws the first-run panel (this theme's look for it is
+# `content/first-run.html.dtmpl`) while the section has no index page, so it
+# disappears the moment somebody creates the front page -- nothing to find,
+# nothing to switch off, no setting to discover (decided 2026-10-20).
 # Seeding a body at `/` would switch the panel off permanently and replace a
 # self-removing placeholder with one an editor has to know to delete. The panel
 # answers "did it work, and where do I go next", and it has to be there on the
@@ -38,24 +39,92 @@ pages:
     order: 20
     body: pages/contact.html
 
-  # ⚠️ NO `template:` HERE, DELIBERATELY -- the NaviNode carries it instead.
-  #
-  # Both would work while the page exists, and a variant override (resolver
-  # priority 10) would win over the NaviNode (priority 30). Measured what each
-  # one is worth with the page deleted:
-  #
-  #   page absent, NaviNode template absent  -> pages/page.html.dtmpl, and the
-  #                                             `{else}` stub is unreachable
-  #   page absent, NaviNode template present -> privacy template + the stub
-  #
-  # So the NaviNode covers BOTH cases and the manifest key covers one. Two
-  # copies that agree today are two copies that can disagree later, and the
-  # variant is the one that would silently win -- so the redundant half is the
-  # one here. `WebDefaultNaviProvider` naming a theme template is also the
-  # existing convention in that file, not a new coupling: `/`, `/login`,
-  # `/register` and both password routes each name one already.
+  # The policy is the page's CONTENT (decided 2026-10-20): `body` is the
+  # placeholder the operator replaces, drawn like any other page. No template
+  # here or on the menu entry; noindex while it holds the placeholder -- the
+  # operator clears it under the page's SEO fields when their policy is in.
   - path: privacy
     locale: en
     title: Privacy
     order: 90
     body: pages/privacy.html
+    noindex: true
+
+  # ⚠️ THE SIGN-IN PAGES ARE CONTENT (decided 2026-10-20): ordinary landing pages, one `auth_form` block each;
+  # the form (action, field names, password field, CSRF token) is Identity's and no block field reaches it.
+  # `system: true` -- owned by the admin system user, undeletable, changed through elevation, noindex.
+  - path: login
+    locale: en
+    title: Sign in
+    order: 101
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: login
+        heading: Sign in
+
+  - path: register
+    locale: en
+    title: Register
+    order: 102
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: register
+        heading: Create account
+
+  - path: forgot-password
+    locale: en
+    title: Forgot password
+    order: 103
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: password_reset_request
+        heading: Forgot password
+
+  - path: forgot-password/confirm
+    locale: en
+    title: Reset password
+    order: 104
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: password_reset_confirm
+        heading: Reset your password
+
+  - path: verify-email
+    locale: en
+    title: Confirm your address
+    order: 105
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: verify_email
+        heading: Confirm your address
+        intro: >-
+          We sent a code to the address you registered with. Enter it here to confirm the address. Until it is confirmed it cannot be used to sign in or to recover the account.
+
+  - path: invitation
+    locale: en
+    title: Accept invitation
+    order: 106
+    body: pages/auth.html
+    contentType: landing
+    system: true
+    blocks:
+      - type: auth_form
+        form: invitation_accept
+        heading: You are invited
+        intro: >-
+          An account has been prepared for you. Choose a password to take it.

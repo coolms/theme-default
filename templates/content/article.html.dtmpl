@@ -1,0 +1,9 @@
+{comment}
+  The CONTENT of an article, drawn inside the frame (decided 2026-10-20). Overrides the platform's
+  renderer of the same name.
+{endcomment}
+<article class="py-2 prose">
+  <h1>{var:page.meta.title}</h1>
+  <div class="text-muted mb-3 small">{var:content.locale}</div>
+  {var:content.body raw}
+</article>

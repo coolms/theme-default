@@ -1,0 +1,8 @@
+{comment}
+  The theme's FRAME (decided 2026-10-20): the header, breadcrumbs and footer every page is drawn in, with the page's
+  own content at the content tag, drawn by the renderer its type names (content/<type>). Where a page lives picks
+  its frame; this is the default wherever nothing names another.
+{endcomment}
+{include:`layouts/default.html.dtmpl`}
+  {fill:content}{content}{endfill}
+{endinclude}
