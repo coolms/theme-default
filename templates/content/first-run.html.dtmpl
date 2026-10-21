@@ -1,0 +1,39 @@
+{comment}
+  The FIRST-RUN panel (decided 2026-10-20): the platform draws it in the section's frame while the section has
+  no index page; creating one replaces it. This theme's look for it; the platform ships a plain one.
+{endcomment}
+{comment}
+  THE FIRST-RUN BLOCK. It answers the only two questions a person has in
+  the first two minutes -- did it work, and where do I go next -- and it is
+  deliberately the page's CONTENT slot rather than a banner bolted on top:
+  the moment anyone writes a front page, this disappears on its own.
+  Nothing to find, nothing to switch off, no setting to discover.
+
+  That is also why it is not styled like a designed page. A default that
+  looks like a design decision is one a new user starts trying to remove
+  instead of replace.
+{endcomment}
+<div class="py-5">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4 p-md-5">
+      <p class="text-uppercase text-secondary small fw-semibold mb-2">Default page</p>
+      <h1 class="h4 mb-3">Your installation is working.</h1>
+      <p class="mb-4">
+        CoolMS shows this until the site has a front page. Create an index page
+        for the site and it takes this panel's place.
+      </p>
+      {comment}The admin link only to a signed-in admin (decided 2026-10-20); a stranger sees the source link.{endcomment}
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        {if:user.isAdmin}<a href="/admin" class="btn btn-primary">Open the admin</a>{endif}
+        <a href="https://github.com/coolms" class="btn btn-outline-secondary">Source and packages</a>
+      </div>
+      {if:user.isAdmin}
+      <p class="text-secondary small mb-0">
+        The front page is an index page under <strong>Content</strong>.
+        Everything else on this page — the header, the footer — comes from the
+        active theme.
+      </p>
+      {endif}
+    </div>
+  </div>
+</div>

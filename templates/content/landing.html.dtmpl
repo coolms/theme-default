@@ -1,0 +1,14 @@
+{comment}
+  The CONTENT of a landing page: its blocks, drawn inside the frame (decided 2026-10-20). Overrides the platform's
+  renderer of the same name.
+{endcomment}
+{comment}
+  The block set and the dispatch are the PLATFORM's, shipped by the Content
+  module -- this theme carries neither. Overriding a single block means
+  adding `partials/blocks/<type>.html.dtmpl` here; the theme's loader
+  outranks the module's, so that file wins and the other twelve still
+  resolve to the shared ones.
+{endcomment}
+<div class="landing-page">
+  {include:`partials/landing-blocks.html.dtmpl`}
+</div>

@@ -13,7 +13,6 @@ dompurify      GHSA-55q2-fjhq-7xh7  moderate  2027-01-05  In the built app (thro
 dompurify      GHSA-6688-9rhm-gjv2  low       2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
 dompurify      GHSA-c2j3-45gr-mqc4  low       2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
 dompurify      GHSA-cmwh-pvxp-8882  moderate  2027-01-05  In the built app (through mermaid); a lockfile update within the declared ranges clears it.
-esbuild        GHSA-67mh-4wv8-2f99  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); cleared by vite 8.3.3, a major upgrade.
 immutable      GHSA-v56q-mh7h-f735  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
 immutable      GHSA-xvcm-6775-5m9r  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
 katex          GHSA-238p-pmpm-9mq7  low       2027-01-05  In the built app (a direct dependency, and through mermaid); cleared by katex 0.19.0, a major upgrade.
@@ -25,13 +24,8 @@ mermaid        GHSA-rhh3-jpg6-66xh  moderate  2027-01-05  In the built app (a di
 nanoid         GHSA-28wg-ghj8-5hjv  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 nanoid         GHSA-2v37-7h3g-55p8  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 nanoid         GHSA-xwg4-73v4-xw9w  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
-picomatch      GHSA-3v7f-55p6-f55p  moderate  2027-01-05  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
-picomatch      GHSA-c2c7-rcm5-vvqj  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
 postcss        GHSA-6g55-p6wh-862q  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 postcss        GHSA-fxqj-rqcc-2cmp  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 postcss        GHSA-qx2v-qp2m-jg93  moderate  2027-01-05  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 postcss        GHSA-r28c-9q8g-f849  high      2026-11-06  Build and test tooling only, not in the built app (through vite); a lockfile update within the declared ranges clears it.
 source-map-js  GHSA-68fv-2mgg-jv7q  high      2026-11-06  Build and test tooling only, not in the built app (through sass, vite); a lockfile update within the declared ranges clears it.
-vite           GHSA-4w7w-66w2-5vf9  moderate  2027-01-05  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
-vite           GHSA-fx2h-pf6j-xcff  high      2026-11-06  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
-vite           GHSA-v6wh-96g9-6wx3  moderate  2027-01-05  Build and test tooling only, not in the built app (a direct dependency); cleared by vite 8.3.3, a major upgrade.
