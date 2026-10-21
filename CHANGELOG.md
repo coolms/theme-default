@@ -9,6 +9,10 @@ major number means here.
 
 ### Changed
 
+- Listings are content renderers too: `content/blog-index`, `content/docs-index` and `content/autoindex` draw a
+  collection directory's listing (and a directory listed automatically) inside the frame, each the inner part of
+  the page template it will replace (`pages/blog-index`, `pages/docs-index`, `pages/autoindex`, kept until the
+  platform draws listings in frames).
 - Pages are drawn in a FRAME: `frames/default.html.dtmpl` is the theme's chrome, and a page's content is drawn at
   `{content}` by the renderer its type names -- `content/page`, `content/landing`, `content/markdown`,
   `content/article`, `content/blog_post`, `content/docs_page`, each the inner part of the page template it replaces.
