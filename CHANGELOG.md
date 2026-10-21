@@ -9,6 +9,8 @@ major number means here.
 
 ### Changed
 
+- The search results page is a content renderer: `content/search` draws `GET /search` inside the frame, the inner
+  part of `pages/search` (kept until the platform draws it in a frame).
 - Listings are content renderers too: `content/blog-index`, `content/docs-index` and `content/autoindex` draw a
   collection directory's listing (and a directory listed automatically) inside the frame, each the inner part of
   the page template it will replace (`pages/blog-index`, `pages/docs-index`, `pages/autoindex`, kept until the
