@@ -20,6 +20,9 @@ major number means here.
 - vite 5.4 -> 6.4.4 (GHSA-698v-4r3x-3vcv, and six listed advisories it also clears). The built stylesheet is the same
   rule for rule; only the minifier's spacing inside media queries differs.
 
+- `partials/blocks/auth_form.html.dtmpl`: the sign-in pages' form block in this theme's Bootstrap card, centred as
+  the old sign-in templates drew it; the platform's partial is plain markup this theme's sheet does not style.
+
 ### Removed
 
 - `pages/home`, `pages/landing`, `pages/markdown`, `pages/article`, `pages/blog_post`, `pages/docs_page`,
