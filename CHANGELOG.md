@@ -5,6 +5,27 @@ All notable changes to `coolms/theme-default` are recorded here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
+## Unreleased
+
+### Changed
+
+- Pages are drawn in a FRAME: `frames/default.html.dtmpl` is the theme's chrome, and a page's content is drawn at
+  `{content}` by the renderer its type names -- `content/page`, `content/landing`, `content/markdown`,
+  `content/article`, `content/blog_post`, `content/docs_page`, each the inner part of the page template it replaces.
+  Requires a platform that renders frames and has `{content}`.
+- The first-run panel is `content/first-run.html.dtmpl`: the platform draws it in the section's frame while the
+  section has no index page. "Open the admin" shows only to a signed-in administrator.
+- The six sign-in pages are seeded as content -- an `auth_form` block each, system pages -- and the privacy
+  placeholder is seeded noindex.
+- vite 5.4 -> 6.4.4 (GHSA-698v-4r3x-3vcv, and six listed advisories it also clears). The built stylesheet is the same
+  rule for rule; only the minifier's spacing inside media queries differs.
+
+### Removed
+
+- `pages/home`, `pages/landing`, `pages/markdown`, `pages/article`, `pages/blog_post`, `pages/docs_page`,
+  `pages/privacy`: replaced by the frame and the content renderers.
+- `pages/list`: referenced by no code, template, configuration or stored data.
+
 ## 2.0.0-alpha6 - 2026-10-07
 
 ### Added
