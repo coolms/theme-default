@@ -7,6 +7,13 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Removed
+
+- The page templates the platform no longer draws: `pages/blog-index`, `pages/docs-index` and `pages/autoindex`
+  (a listing is drawn in its directory's frame by `content/blog-index`, `content/docs-index` and
+  `content/autoindex`), and the six `auth/*` templates (the sign-in pages are content, drawn in the frame by the
+  sign-in form block). Requires a platform that draws listings in frames.
+
 ### Added
 
 - The sign-in form block passes `` overridesFrom=`block.field_texts` `` to the form widget, so a page's own label and
