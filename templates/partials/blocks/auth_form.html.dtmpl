@@ -3,6 +3,8 @@
   sign-in templates had. The form is still given its id and NOTHING ELSE -- action, field names, password type and
   CSRF token stay Identity's form definition. Keep the logic in step with the platform's partial
   (src/Identity/templates/partials/blocks/auth_form.html.dtmpl); only the classes here are the theme's.
+  The one exception is `overridesFrom`: it NAMES where the page's field texts are, and the platform's form widget
+  applies only a label and a help text from there, to fields the form has, in the page's language.
 {endcomment}
 <section class="block-auth-form d-flex justify-content-center py-5">
   <div class="card shadow-sm border-0 w-100" style="max-width: 400px;">
@@ -16,19 +18,19 @@
     {loop:flashes.success}<div class="alert alert-success">{var:item.message}</div>{endloop}
     {if:block.intro}<p class="text-body-secondary">{var:block.intro escape}</p>{endif}
 
-    {if:block.form=`login`}{widget:form:`identity.login`}{endif}
-    {if:block.form=`register`}{widget:form:`identity.register`}{endif}
-    {if:block.form=`password_reset_request`}{unless:flashes.success}{widget:form:`identity.password_reset_request`}{endunless}{endif}
-    {if:block.form=`password_reset_confirm`}{unless:flashes.success}{widget:form:`identity.password_reset_confirm`}{endunless}{endif}
+    {if:block.form=`login`}{widget:form:`identity.login` overridesFrom=`block.field_texts`}{endif}
+    {if:block.form=`register`}{widget:form:`identity.register` overridesFrom=`block.field_texts`}{endif}
+    {if:block.form=`password_reset_request`}{unless:flashes.success}{widget:form:`identity.password_reset_request` overridesFrom=`block.field_texts`}{endunless}{endif}
+    {if:block.form=`password_reset_confirm`}{unless:flashes.success}{widget:form:`identity.password_reset_confirm` overridesFrom=`block.field_texts`}{endunless}{endif}
     {if:block.form=`verify_email`}
       {unless:flashes.success}
-        {widget:form:`identity.verify_email`}
+        {widget:form:`identity.verify_email` overridesFrom=`block.field_texts`}
         <p class="text-center text-muted small mt-3 mb-0">Nothing arrived, or the code has expired?</p>
         {widget:form:`identity.verify_email_resend`}
       {endunless}
     {endif}
     {if:block.form=`invitation_accept`}
-      {unless:flashes.success}{if:request.query.token}{widget:form:`identity.invitation_accept`}{endif}{endunless}
+      {unless:flashes.success}{if:request.query.token}{widget:form:`identity.invitation_accept` overridesFrom=`block.field_texts`}{endif}{endunless}
     {endif}
 
     {if:block.help}<p class="text-muted small mt-3">{var:block.help escape}</p>{endif}

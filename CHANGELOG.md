@@ -7,6 +7,12 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Added
+
+- The sign-in form block passes `` overridesFrom=`block.field_texts` `` to the form widget, so a page's own label and
+  help text per field (per language version) reach the form. The form's action, field names, field types and CSRF
+  token stay the platform's. A platform without the parameter ignores it, and the form draws as before.
+
 ### Changed
 
 - The search results page is a content renderer: `content/search` draws `GET /search` inside the frame, the inner
