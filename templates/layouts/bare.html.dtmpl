@@ -1,8 +1,8 @@
 {comment}
   A bare page: one column of plain type, monochrome, light or dark as the visitor's system is set. Nothing else --
   no header, footer, navigation or search, no JavaScript at all, and none of the partials base.html.dtmpl adds to
-  every page (analytics, experiments, personalization, the consent banner, chat). Its first use is a landing page
-  ("Under construction"), assigned to a whole site; any page may use it.
+  every page (analytics, experiments, personalization, the consent banner, chat). frames/bare.html.dtmpl draws a
+  site's pages in it when the site's root directory names that frame.
 
   The head keeps the SEO partial (title, description, canonical), so an indexable site is described as any other.
   The styles are inline: one small block, no theme stylesheet, so nothing else is fetched.

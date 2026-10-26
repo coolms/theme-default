@@ -1,0 +1,9 @@
+{comment}
+  A bare FRAME: the page's own content at the content tag, in one column of plain type, monochrome, light or dark as
+  the visitor's system is set -- and nothing else: no header, footer, navigation, search or JavaScript, and none of
+  the partials the other layouts add (analytics, experiments, personalization, the consent banner, chat). Named by a
+  site's root directory, it draws every page of that site; a landing page ("Under construction") is its first use.
+{endcomment}
+{include:`layouts/bare.html.dtmpl`}
+  {fill:content}{content}{endfill}
+{endinclude}

@@ -22,10 +22,10 @@ major number means here.
 
 ### Added
 
-- `layouts/bare.html.dtmpl` and `pages/landing.html.dtmpl`: a page of plain type, monochrome, light or dark as the
-  visitor's system is set, with no header, footer, navigation, search or JavaScript, and without the analytics,
-  experiments, personalization, consent-banner and chat partials every other layout adds. The landing page renders
-  the page's title and body. Meant to be assigned to a whole site section; no existing page uses it.
+- `frames/bare.html.dtmpl`: a frame of plain type, monochrome, light or dark as the visitor's system is set, with no
+  header, footer, navigation, search or JavaScript, and without the analytics, experiments, personalization,
+  consent-banner and chat partials every other layout adds; the page's content draws inside it as in any frame. A
+  site whose root directory names it draws every page that way. Its layout is `layouts/bare.html.dtmpl`.
 - The sign-in form block passes `` overridesFrom=`block.field_texts` `` to the form widget, so a page's own label and
   help text per field (per language version) reach the form. The form's action, field names, field types and CSRF
   token stay the platform's. A platform without the parameter ignores it, and the form draws as before.
