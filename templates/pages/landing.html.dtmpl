@@ -1,9 +1,0 @@
-{comment}
-  A landing page on the bare layout: the page's title as its heading, then its body as written. Assigned to a whole
-  site section (its template), so every page of that site renders this way.
-{endcomment}{include:`layouts/bare.html.dtmpl`}
-  {fill:content}
-    <h1>{var:page.title}</h1>
-    {var:page.body raw}
-  {endfill}
-{endinclude}
