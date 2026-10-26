@@ -7,6 +7,12 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Changed
+
+- `content/page.html.dtmpl` leaves out the "Last updated" line under a page drawn in `frames/bare.html.dtmpl` (it
+  reads the renderer's `frame.template`), so a bare page shows its text and nothing else. Every page drawn in any
+  other frame, or with no frame, renders byte for byte as before.
+
 ### Security
 
 - `dompurify` (through `mermaid`) 3.4.10 -> 3.4.17 in the lockfile, within mermaid's own range: clears seven
