@@ -1,6 +1,8 @@
 {comment}
   The CONTENT of a plain page, drawn inside the frame (decided 2026-10-20). Overrides the platform's
-  renderer of the same name.
+  renderer of the same name. The revision date shows under every page except one drawn in the bare frame (a landing
+  shows its text and nothing else); frame.template is the frame drawing the page, given by the renderer. Each tag
+  stands on a line of its own, which the engine drops whole, so every other page renders byte for byte as before.
 {endcomment}
 <article class="py-2">
   <h1>{var:page.title}</h1>
@@ -8,6 +10,8 @@
     {var:page.body raw}
   </div>
   {if:page.revisedAt}
+  {unless:frame.template=`frames/bare.html.dtmpl`}
     <p class="text-secondary small mt-4">Last updated <time datetime="{var:page.revisedAt}">{var:page.revisedAt}</time></p>
+  {endunless}
   {endif}
 </article>
