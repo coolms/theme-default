@@ -7,6 +7,12 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Security
+
+- `dompurify` (through `mermaid`) 3.4.10 -> 3.4.17 in the lockfile, within mermaid's own range: clears seven
+  advisories, one critical (GHSA-cg2g-xh64-v4q7) and one high (GHSA-mrv2-3pqr-j5jr). The four that were listed in
+  `.github/advisories.txt` come off it.
+
 ### Removed
 
 - The page templates the platform no longer draws: `pages/blog-index`, `pages/docs-index` and `pages/autoindex`
