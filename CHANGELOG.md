@@ -7,6 +7,12 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Added
+
+- `partials/seo-head.html.dtmpl` places the `seo.meta`, `seo.og` and `seo.twitter` lists: the tags a page inherits
+  from the nodes above it, which the fixed tags do not carry. Each value is escaped as an attribute. With the lists
+  empty, or absent, the head renders exactly as before.
+
 ### Changed
 
 - `content/page.html.dtmpl` leaves out the "Last updated" line under a page drawn in `frames/bare.html.dtmpl` (it
