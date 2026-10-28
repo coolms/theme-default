@@ -9,5 +9,8 @@
 <meta property="og:type" content="{var:seo.ogType default=`website`}">
 {if:seo.canonical}<meta property="og:url" content="{var:seo.canonical}">{endif}
 {if:seo.ogImage}<meta property="og:image" content="{var:seo.ogImage}">{endif}
-<meta name="twitter:card" content="{var:seo.twitterCard default=`summary`}">
+<meta name="twitter:card" content="{var:seo.twitterCard default=`summary`}">{loop:seo.meta}
+<meta name="{var:item.name}" content="{var:item.content}">{endloop}{loop:seo.og}
+<meta property="{var:item.name}" content="{var:item.content}">{endloop}{loop:seo.twitter}
+<meta name="{var:item.name}" content="{var:item.content}">{endloop}
 {if:seo.jsonLd}<script type="application/ld+json">{var:seo.jsonLd raw}</script>{endif}
