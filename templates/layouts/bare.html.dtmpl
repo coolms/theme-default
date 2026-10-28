@@ -14,9 +14,9 @@
     <meta name="color-scheme" content="light dark">
     {include:`partials/seo-head.html.dtmpl`}
     <style>
-        :root { --bare-fg: #111; --bare-muted: #555; --bare-bg: #fff; }
+        :root { --bare-fg: #111111; --bare-muted: #555555; --bare-bg: #fff; }
         @media (prefers-color-scheme: dark) {
-            :root { --bare-fg: #eee; --bare-muted: #aaa; --bare-bg: #111; }
+            :root { --bare-fg: #eee; --bare-muted: #aaa; --bare-bg: #111111; }
         }
         html, body { margin: 0; background: var(--bare-bg); color: var(--bare-fg); }
         body {
