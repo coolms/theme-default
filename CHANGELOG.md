@@ -21,6 +21,12 @@ major number means here.
 
 ### Security
 
+- The partials no longer carry inline scripts. A site page loads scripts only from the folders its
+  Content-Security-Policy names, so the experiments, personalization, chat widget, social share, comments and
+  newsletter scripts are loaded from `/site-scripts/`, the platform's own folder. The experiment configuration and
+  the personalization rules travel in an `application/json` data block, which a browser never runs, read by the
+  static script. Needs a CoolMS release that serves those scripts.
+
 - `dompurify` (through `mermaid`) 3.4.10 -> 3.4.17 in the lockfile, within mermaid's own range: clears seven
   advisories, one critical (GHSA-cg2g-xh64-v4q7) and one high (GHSA-mrv2-3pqr-j5jr). The four that were listed in
   `.github/advisories.txt` come off it.
