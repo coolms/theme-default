@@ -27,6 +27,9 @@ major number means here.
   the personalization rules travel in an `application/json` data block, which a browser never runs, read by the
   static script. Needs a CoolMS release that serves those scripts.
 
+- `vite` 6.4.4 -> 6.4.5 in the lockfile, within the declared `^6.4.4`: clears GHSA-8g5g-mxqh-grgj (moderate,
+  `server.fs.deny` bypassed with queries, in the development server). The build is unchanged.
+
 - `dompurify` (through `mermaid`) 3.4.10 -> 3.4.17 in the lockfile, within mermaid's own range: clears seven
   advisories, one critical (GHSA-cg2g-xh64-v4q7) and one high (GHSA-mrv2-3pqr-j5jr). The four that were listed in
   `.github/advisories.txt` come off it.
