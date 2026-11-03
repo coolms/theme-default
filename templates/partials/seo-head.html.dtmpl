@@ -12,5 +12,7 @@
 <meta name="twitter:card" content="{var:seo.twitterCard default=`summary`}">{loop:seo.meta}
 <meta name="{var:item.name}" content="{var:item.content}">{endloop}{loop:seo.og}
 <meta property="{var:item.name}" content="{var:item.content}">{endloop}{loop:seo.twitter}
-<meta name="{var:item.name}" content="{var:item.content}">{endloop}
+<meta name="{var:item.name}" content="{var:item.content}">{endloop}{loop:seo.styles}
+<link rel="stylesheet" href="{var:item.src}" integrity="{var:item.integrity}" crossorigin="{var:item.crossorigin}">{endloop}{loop:seo.scripts}
+<script src="{var:item.src}" integrity="{var:item.integrity}" crossorigin="{var:item.crossorigin}" defer></script>{endloop}
 {if:seo.jsonLd}<script type="application/ld+json">{var:seo.jsonLd raw}</script>{endif}

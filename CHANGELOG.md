@@ -9,6 +9,10 @@ major number means here.
 
 ### Added
 
+- `partials/seo-head.html.dtmpl` places the `seo.styles` and `seo.scripts` lists: the external style sheets and
+  scripts a page loads, ancestors' first, each with its `integrity` hash and `crossorigin`, so the browser
+  refuses a file whose bytes differ. Scripts are deferred. Each value is escaped as an attribute. With the lists
+  empty, or absent, the head renders exactly as before.
 - `partials/seo-head.html.dtmpl` places the `seo.meta`, `seo.og` and `seo.twitter` lists: the tags a page inherits
   from the nodes above it, which the fixed tags do not carry. Each value is escaped as an attribute. With the lists
   empty, or absent, the head renders exactly as before.
