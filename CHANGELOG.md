@@ -9,6 +9,10 @@ major number means here.
 
 ### Added
 
+- `content/email-alias-confirm.html.dtmpl` draws the mail alias confirmation page (`/email/aliases/confirm`) in a
+  narrow card inside the frame. It is chrome only: the states, the buttons and the script are the platform's
+  `partials/email-alias-confirm.html.dtmpl`, which it includes.
+
 - `partials/seo-head.html.dtmpl` places the `seo.styles` and `seo.scripts` lists: the external style sheets and
   scripts a page loads, ancestors' first, each with its `integrity` hash and `crossorigin`, so the browser
   refuses a file whose bytes differ. Scripts are deferred. Each value is escaped as an attribute. With the lists
