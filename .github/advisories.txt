@@ -15,3 +15,4 @@ mermaid        GHSA-3rrr-jr9j-h3q3  moderate  2027-01-05  In the built app (a di
 mermaid        GHSA-6x64-9x62-f2gx  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
 mermaid        GHSA-c4c3-pg64-4m4v  low       2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
 mermaid        GHSA-rhh3-jpg6-66xh  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+picomatch      GHSA-fc5q-39xc-vjpf  high      2026-12-17  Build tools only (vite, and sass through @parcel/watcher; npm ls --omit=dev is empty, the built assets do not contain it); no fixed release yet. Update and remove this line when one appears.
