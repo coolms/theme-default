@@ -7,6 +7,11 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Changed
+
+- The register block shows the server's sentence in place of the form while registration is closed, and the sign-in
+  block offers the register link only while it is open (`registration.open`, `registration.closedText`).
+
 ### Added
 
 - `content/email-alias-confirm.html.dtmpl` draws the mail alias confirmation page (`/email/aliases/confirm`) in a
