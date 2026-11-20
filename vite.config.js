@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+    // Lazy chunks and their stylesheets resolve next to the entry, wherever the theme is published.
+    base: './',
     build: {
         manifest: true,           // generates .vite/manifest.json
         outDir: 'public',

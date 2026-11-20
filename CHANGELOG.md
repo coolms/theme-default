@@ -7,6 +7,12 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Fixed
+
+- Lazy chunks load from where the theme is published: the build uses a relative base, so the chunks that math
+  and diagrams import, and their stylesheets, resolve next to the entry rather than at `/assets/`, where they answered
+  404 and math and diagrams were never drawn.
+
 ### Changed
 
 - mermaid 11.17.2 and katex 0.18.11: the five mermaid advisories and the theme's own katex advisory
