@@ -9,9 +9,4 @@
 # reasons below were measured on 2026-10-07 from this lockfile: which direct dependencies bring the package in, whether
 # it ships, and what npm offers to clear it.
 
-katex          GHSA-238p-pmpm-9mq7  low       2027-01-05  In the built app (a direct dependency, and through mermaid); cleared by katex 0.19.0, a major upgrade.
-mermaid        GHSA-2v8p-3f2j-5mp7  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
-mermaid        GHSA-3rrr-jr9j-h3q3  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
-mermaid        GHSA-6x64-9x62-f2gx  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
-mermaid        GHSA-c4c3-pg64-4m4v  low       2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
-mermaid        GHSA-rhh3-jpg6-66xh  moderate  2027-01-05  In the built app (a direct dependency); a lockfile update within the declared ranges clears it.
+katex          GHSA-238p-pmpm-9mq7  low       2027-01-05  Only mermaid's own copy (node_modules/mermaid/node_modules/katex 0.16.47): mermaid 11 asks for katex ^0.16, and only mermaid 12, a major, takes 0.18. The theme's own katex is 0.18.11. Mermaid renders math only in a diagram label written with it; no stored page has a diagram. Cleared by the mermaid 12 bump, after a check that diagrams render as before.
