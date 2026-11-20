@@ -9,6 +9,9 @@ major number means here.
 
 ### Changed
 
+- mermaid 11.17.2 and katex 0.18.11: the five mermaid advisories and the theme's own katex advisory
+  (GHSA-238p-pmpm-9mq7) are cleared. Formulas render as before: katex renames its classes, and the page loads the
+  stylesheet of the same version. Mermaid's own katex (0.16) stays listed until mermaid 12.
 - The register block shows the server's sentence in place of the form while registration is closed, and the sign-in
   block offers the register link only while it is open (`registration.open`, `registration.closedText`).
 
