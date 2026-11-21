@@ -1,12 +1,14 @@
 {comment}
   The header's language switcher: the widget draws it (partials/widgets/language-switcher.html.dtmpl), this partial
   holds its rules, since a widget's template is not on the static include walk and its {css} would be dropped.
-  At phone width the summary shows the globe and the code only.
+  It sits outside the collapsing menu, so it stays in the bar at phone width (the globe and the code only); from lg
+  it is the last item of the bar.
 {endcomment}
 {css}
-.lang-switch{position:relative}
+.lang-switch{position:relative; color:var(--bs-navbar-color, inherit)}
 .lang-switch__current{display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .5rem; border-radius:.375rem;
-  cursor:pointer; list-style:none; color:inherit}
+  cursor:pointer; list-style:none; color:var(--bs-navbar-color, inherit)}
+.lang-switch__current:hover{color:var(--bs-navbar-hover-color, inherit)}
 .lang-switch__current::-webkit-details-marker{display:none}
 .lang-switch__current::after{content:""; border:solid currentColor; border-width:0 1px 1px 0; padding:2px;
   transform:rotate(45deg); margin:0 .125rem .2rem .25rem}
@@ -22,11 +24,12 @@
 .lang-switch__list .lang-switch__link[aria-current]{font-weight:600}
 .lang-switch__aside{color:var(--bs-secondary-color, #6c757d); font-size:.875em}
 .lang-switch--inline{display:inline-flex; align-items:center; gap:.5rem}
-.lang-switch--inline .lang-switch__link{color:inherit; text-decoration:none; opacity:.75}
-.lang-switch--inline .lang-switch__link[aria-current]{opacity:1; font-weight:600; text-decoration:underline}
+.lang-switch--inline .lang-switch__link{color:var(--bs-navbar-color, inherit); text-decoration:none; opacity:.75}
+.lang-switch--inline .lang-switch__link[aria-current]{opacity:1; font-weight:600; text-decoration:underline;
+  color:var(--bs-navbar-active-color, inherit)}
 @media (max-width:575.98px){
   .lang-switch__text{display:none}
   .lang-switch__code{display:inline}
 }
 {endcss}
-{if:i18n.locales}<div class="me-2">{widget:language_switcher display=`native` icon=`on` mode=`dropdown`}</div>{endif}
+{if:i18n.locales}<div class="ms-auto me-2 ms-lg-2 me-lg-0 order-lg-last">{widget:language_switcher display=`native` icon=`on` mode=`dropdown`}</div>{endif}
