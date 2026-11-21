@@ -1,0 +1,22 @@
+{comment}
+  The language switcher's markup ({widget:language_switcher}). Every language is a real link in the HTML: the
+  dropdown is a details/summary, so it opens without JS and a crawler reads every link. Each link names its language
+  (hreflang, lang); the current one carries aria-current. No flags: a flag is a country, not a language.
+  The rules live in partials/language-switcher.html.dtmpl: a widget's template is not on the static include walk, so
+  a {css} block here would be dropped.
+{endcomment}
+{if:dropdown}
+<nav class="lang-switch" aria-label="{var:label escape}">
+<details class="lang-switch__menu">
+  <summary class="lang-switch__current">{if:icon}<svg class="lang-switch__globe" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.75" ry="6.5"/><path d="M1.5 8h13M2.6 4.5h10.8M2.6 11.5h10.8"/></svg>{endif}<span class="lang-switch__text" lang="{var:current.textLang escape}">{var:current.text escape}</span><span class="lang-switch__code">{var:current.code uppercase escape}</span></summary>
+  <ul class="lang-switch__list" role="list">
+    {loop:languages:lang}<li><a class="lang-switch__link" href="{var:lang.url escape}" hreflang="{var:lang.locale escape}" lang="{var:lang.locale escape}"{if:lang.current} aria-current="page"{endif}>{var:lang.nativeName escape}{if:lang.current}{else}<span class="lang-switch__aside" lang="{var:current.locale escape}">{var:lang.name escape}</span>{endif}</a></li>{endloop}
+  </ul>
+</details>
+</nav>
+{else}
+<nav class="lang-switch lang-switch--inline" aria-label="{var:label escape}">
+  {if:icon}<svg class="lang-switch__globe" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.75" ry="6.5"/><path d="M1.5 8h13M2.6 4.5h10.8M2.6 11.5h10.8"/></svg>{endif}
+  {loop:languages:lang}<a class="lang-switch__link" href="{var:lang.url escape}" hreflang="{var:lang.locale escape}" lang="{var:lang.textLang escape}"{if:lang.current} aria-current="page"{endif}>{var:lang.text escape}</a>{endloop}
+</nav>
+{endif}

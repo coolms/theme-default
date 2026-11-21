@@ -7,6 +7,14 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Added
+
+- The header's language switcher is a dropdown of real links, drawn by `{widget:language_switcher}`: a globe and the
+  current language, each language named in its own and the interface's, `hreflang` and `lang` on each link and
+  `aria-current` on the current one; it opens without JS, and at phone width shows the globe and the code. No flags.
+  The widget's `display` (native, name, code, locale), `icon` (on, off) and `mode` (dropdown, inline) params choose
+  its form.
+
 ### Fixed
 
 - Lazy chunks load from where the theme is published: the build uses a relative base, so the chunks that math
