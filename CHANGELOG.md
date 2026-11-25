@@ -7,6 +7,10 @@ Versioning is described in `CONTRIBUTING.md` -- read it before assuming what a
 major number means here.
 ## Unreleased
 
+### Changed
+
+- katex `^0.19.1` (was `^0.18.11`, a deprecated release).
+
 ### Added
 
 - The header's language switcher is a dropdown of real links, drawn by `{widget:language_switcher}`: a globe and the
