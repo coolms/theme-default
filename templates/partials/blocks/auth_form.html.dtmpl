@@ -23,22 +23,11 @@
       {if:registration.open}{widget:form:`identity.register` overridesFrom=`block.field_texts`}{else}<p class="text-body-secondary" role="status">{var:registration.closedText}</p>{endif}
     {endif}
     {if:block.form=`password_reset_request`}{unless:flashes.success}{widget:form:`identity.password_reset_request` overridesFrom=`block.field_texts`}{endunless}{endif}
-    {if:block.form=`password_reset_confirm`}
-      {if:flashes.token_invalid}
-        <p class="text-body-secondary" role="status" data-token-invalid>This password reset link is no longer valid. Ask for a new one.</p>
-        {if:routes.passwordReset}<p class="text-center small mt-3 mb-0"><a href="{var:routes.passwordReset href}">Ask for a new link</a></p>{endif}
-      {else}
-        {unless:flashes.success}{widget:form:`identity.password_reset_confirm` overridesFrom=`block.field_texts`}{endunless}
-      {endif}
-    {endif}
+    {if:block.form=`password_reset_confirm`}{unless:flashes.success}{widget:form:`identity.password_reset_confirm` overridesFrom=`block.field_texts`}{endunless}{endif}
     {if:block.form=`verify_email`}
       {unless:flashes.success}
-        {if:flashes.token_invalid}
-          <p class="text-body-secondary" role="status" data-token-invalid>This verification link is no longer valid. Send yourself a new one below.</p>
-        {else}
-          {widget:form:`identity.verify_email` overridesFrom=`block.field_texts`}
-          <p class="text-center text-muted small mt-3 mb-0">Nothing arrived, or the code has expired?</p>
-        {endif}
+        {widget:form:`identity.verify_email` overridesFrom=`block.field_texts`}
+        <p class="text-center text-muted small mt-3 mb-0">Nothing arrived, or the code has expired?</p>
         {widget:form:`identity.verify_email_resend`}
       {endunless}
     {endif}
