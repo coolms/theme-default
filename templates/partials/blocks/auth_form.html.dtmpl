@@ -32,8 +32,18 @@
       {endunless}
     {endif}
     {if:block.form=`invitation_accept`}
-      {unless:flashes.success}{if:request.query.token}{widget:form:`identity.invitation_accept` overridesFrom=`block.field_texts`}{endif}{endunless}
+      {if:flashes.token_invalid}
+        <p class="text-body-secondary" role="status" data-token-invalid>This invitation link is no longer valid. Ask the person who invited you to send a new one.</p>
+      {else}
+        {unless:flashes.success}
+          <p class="text-body-secondary" role="status" data-token-missing hidden>Open this page from the link in your invitation.</p>
+          {widget:form:`identity.invitation_accept` overridesFrom=`block.field_texts`}
+        {endunless}
+      {endif}
     {endif}
+    {if:block.form=`invitation_accept`}<script src="/site-scripts/token-link.js" defer></script>{endif}
+    {if:block.form=`password_reset_confirm`}<script src="/site-scripts/token-link.js" defer></script>{endif}
+    {if:block.form=`verify_email`}<script src="/site-scripts/token-link.js" defer></script>{endif}
 
     {if:block.help}<p class="text-muted small mt-3">{var:block.help escape}</p>{endif}
 
